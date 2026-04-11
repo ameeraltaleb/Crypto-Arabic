@@ -1,0 +1,129 @@
+import { useState, useEffect } from 'react';
+import { TrendingDown, TrendingUp, AlertTriangle, Info } from 'lucide-react';
+
+interface FngData {
+  value: string;
+  value_classification: string;
+  timestamp: string;
+  time_until_update: string;
+}
+
+export default function FearAndGreedIndex() {
+  const [data, setData] = useState<FngData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchFng = async () => {
+      try {
+        const res = await fetch('https://api.alternative.me/fng/?limit=1');
+        const json = await res.json();
+        if (json && json.data && json.data.length > 0) {
+          setData(json.data[0]);
+        }
+      } catch (error) {
+        console.error('Failed to fetch Fear and Greed index', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFng();
+    // Refresh every hour
+    const interval = setInterval(fetchFng, 3600000);
+    return () => clearInterval(interval);
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="bg-gray-900/40 backdrop-blur-sm rounded-3xl p-6 lg:p-8 border border-gray-800/60 shadow-xl animate-pulse">
+        <div className="h-6 bg-gray-800 rounded w-1/2 mb-6"></div>
+        <div className="h-32 bg-gray-800 rounded-full w-32 mx-auto"></div>
+      </div>
+    );
+  }
+
+  if (!data) return null;
+
+  const value = parseInt(data.value, 10);
+  
+  // Determine color and icon based on value
+  let colorClass = 'text-gray-400';
+  let bgClass = 'bg-gray-800';
+  let Icon = AlertTriangle;
+
+  if (value <= 25) {
+    colorClass = 'text-red-500';
+    bgClass = 'bg-red-500/10';
+    Icon = TrendingDown;
+  } else if (value <= 45) {
+    colorClass = 'text-orange-500';
+    bgClass = 'bg-orange-500/10';
+    Icon = TrendingDown;
+  } else if (value <= 55) {
+    colorClass = 'text-yellow-500';
+    bgClass = 'bg-yellow-500/10';
+    Icon = AlertTriangle;
+  } else if (value <= 75) {
+    colorClass = 'text-green-400';
+    bgClass = 'bg-green-400/10';
+    Icon = TrendingUp;
+  } else {
+    colorClass = 'text-green-500';
+    bgClass = 'bg-green-500/10';
+    Icon = TrendingUp;
+  }
+
+  // Calculate rotation for the gauge needle (0 to 180 degrees)
+  const rotation = (value / 100) * 180 - 90;
+
+  return (
+    <div className="bg-gray-900/40 backdrop-blur-sm rounded-3xl p-6 lg:p-8 border border-gray-800/60 shadow-xl">
+      <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-3">
+        <div className="bg-blue-500/10 p-2 rounded-lg">
+          <Icon className={`w-5 h-5 ${colorClass}`} />
+        </div>
+        مؤشر الخوف والطمع
+      </h3>
+      
+      <div className="relative flex flex-col items-center justify-center py-4">
+        {/* Gauge Background */}
+        <div className="relative w-48 h-24 overflow-hidden">
+          <div className="absolute top-0 left-0 w-48 h-48 rounded-full border-[16px] border-gray-800 border-b-transparent border-r-transparent rotate-45"></div>
+          {/* Gradient overlay for gauge */}
+          <div className="absolute top-0 left-0 w-48 h-48 rounded-full border-[16px] border-transparent border-t-red-500 border-l-orange-500 border-b-green-500 border-r-green-400 rotate-45 opacity-20 mix-blend-screen"></div>
+          
+          {/* Needle */}
+          <div 
+            className="absolute bottom-0 left-1/2 w-1 h-20 bg-white origin-bottom rounded-t-full transition-transform duration-1000 ease-out"
+            style={{ transform: `translateX(-50%) rotate(${rotation}deg)` }}
+          >
+            <div className="absolute -bottom-2 -left-1.5 w-4 h-4 bg-white rounded-full shadow-lg"></div>
+          </div>
+        </div>
+
+        <div className="mt-6 text-center">
+          <div className={`text-4xl font-black ${colorClass} mb-1`}>
+            {value}
+          </div>
+          <div className="text-gray-300 font-bold text-lg mb-6">
+            {data.value_classification === 'Extreme Fear' && 'خوف شديد'}
+            {data.value_classification === 'Fear' && 'خوف'}
+            {data.value_classification === 'Neutral' && 'محايد'}
+            {data.value_classification === 'Greed' && 'طمع'}
+            {data.value_classification === 'Extreme Greed' && 'طمع شديد'}
+          </div>
+        </div>
+      </div>
+
+      {/* Explanation Section */}
+      <div className="mt-2 pt-5 border-t border-gray-800/60">
+        <div className="flex items-start gap-2.5 text-gray-400">
+          <Info className="w-4 h-4 mt-0.5 shrink-0 text-blue-400" />
+          <p className="text-xs leading-relaxed">
+            يتم تحديث هذا المؤشر يومياً بناءً على بيانات من <a href="https://alternative.me/crypto/fear-and-greed-index/" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 transition-colors">Alternative.me</a>. يعتمد في حساباته على تقلبات السوق، حجم التداول، زخم وسائل التواصل الاجتماعي، وهيمنة البيتكوين.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
