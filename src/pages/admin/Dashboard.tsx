@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Edit, Trash2, Eye, LogOut, CheckCircle, Clock, Settings, FileText, Save } from 'lucide-react';
+import { collection, getDocs, deleteDoc, doc, setDoc, query, orderBy } from 'firebase/firestore';
+import { db } from '../../lib/firebase';
+import { useAuth } from '../../lib/AuthContext';
 
 interface Article {
   id: number;
@@ -25,27 +28,32 @@ export default function AdminDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSavingSettings, setIsSavingSettings] = useState(false);
   const [settingsMessage, setSettingsMessage] = useState({ type: '', text: '' });
+  const { user, logout, loading: authLoading } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (!authLoading && !user) {
+      navigate('/admin/login');
+    } else if (user) {
+      fetchData();
+    }
+  }, [user, authLoading]);
 
   const fetchData = async () => {
     setIsLoading(true);
     try {
       // Fetch articles
-      const resArticles = await fetch('/api/admin/articles');
-      if (resArticles.status === 401) {
-        navigate('/admin/login');
-        return;
-      }
-      const articlesData = await resArticles.json();
+      const q = query(collection(db, 'articles'), orderBy('published_at', 'desc'));
+      const snapshot = await getDocs(q);
+      const articlesData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as any));
       setArticles(articlesData);
 
       // Fetch settings
-      const resSettings = await fetch('/api/settings');
-      const settingsData = await resSettings.json();
+      const settingsSnapshot = await getDocs(collection(db, 'settings'));
+      const settingsData: any = {};
+      settingsSnapshot.forEach(doc => {
+        settingsData[doc.id] = doc.data().value;
+      });
       setSettings(prev => ({ ...prev, ...settingsData }));
     } catch (error) {
       console.error('Failed to fetch data:', error);
@@ -54,12 +62,12 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: string) => {
     if (!window.confirm('هل أنت متأكد من حذف هذا المقال؟')) return;
     
     try {
-      await fetch(`/api/admin/articles/${id}`, { method: 'DELETE' });
-      setArticles(articles.filter(a => a.id !== id));
+      await deleteDoc(doc(db, 'articles', id));
+      setArticles(articles.filter(a => a.id !== (id as any)));
     } catch (error) {
       console.error('Failed to delete article:', error);
     }
@@ -71,19 +79,13 @@ export default function AdminDashboard() {
     setSettingsMessage({ type: '', text: '' });
 
     try {
-      const response = await fetch('/api/admin/settings', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(settings),
-      });
-
-      if (response.ok) {
-        setSettingsMessage({ type: 'success', text: 'تم حفظ الإعدادات بنجاح!' });
-      } else {
-        setSettingsMessage({ type: 'error', text: 'حدث خطأ أثناء الحفظ.' });
-      }
+      const promises = Object.entries(settings).map(([key, value]) => 
+        setDoc(doc(db, 'settings', key), { key, value })
+      );
+      await Promise.all(promises);
+      setSettingsMessage({ type: 'success', text: 'تم حفظ الإعدادات بنجاح!' });
     } catch (error) {
-      setSettingsMessage({ type: 'error', text: 'تعذر الاتصال بالخادم.' });
+      setSettingsMessage({ type: 'error', text: 'حدث خطأ أثناء الحفظ.' });
     } finally {
       setIsSavingSettings(false);
       setTimeout(() => setSettingsMessage({ type: '', text: '' }), 3000);
@@ -91,7 +93,7 @@ export default function AdminDashboard() {
   };
 
   const handleLogout = async () => {
-    await fetch('/api/admin/logout', { method: 'POST' });
+    await logout();
     navigate('/admin/login');
   };
 

@@ -6,6 +6,7 @@
 import { Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
+import { AuthProvider } from './lib/AuthContext';
 
 // Lazy load pages for better performance (Code Splitting)
 const Home = lazy(() => import('./pages/Home'));
@@ -27,23 +28,25 @@ const PageLoader = () => (
 
 export default function App() {
   return (
-    <Suspense fallback={<PageLoader />}>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="article/:slug" element={<ArticleDetails />} />
-          <Route path="about" element={<About />} />
-          <Route path="privacy" element={<Privacy />} />
-          <Route path="terms" element={<Terms />} />
-          <Route path="contact" element={<Contact />} />
-          
-          {/* Admin Routes */}
-          <Route path="admin/login" element={<AdminLogin />} />
-          <Route path="admin/dashboard" element={<AdminDashboard />} />
-          <Route path="admin/articles/new" element={<CreateArticle />} />
-        </Route>
-      </Routes>
-    </Suspense>
+    <AuthProvider>
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route path="article/:slug" element={<ArticleDetails />} />
+            <Route path="about" element={<About />} />
+            <Route path="privacy" element={<Privacy />} />
+            <Route path="terms" element={<Terms />} />
+            <Route path="contact" element={<Contact />} />
+            
+            {/* Admin Routes */}
+            <Route path="admin/login" element={<AdminLogin />} />
+            <Route path="admin/dashboard" element={<AdminDashboard />} />
+            <Route path="admin/articles/new" element={<CreateArticle />} />
+          </Route>
+        </Routes>
+      </Suspense>
+    </AuthProvider>
   );
 }
 

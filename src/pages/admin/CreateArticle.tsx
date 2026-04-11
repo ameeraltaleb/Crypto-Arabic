@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Save, ArrowRight } from 'lucide-react';
 import slugify from 'slugify';
+import { collection, addDoc } from 'firebase/firestore';
+import { db } from '../../lib/firebase';
 
 export default function CreateArticle() {
   const navigate = useNavigate();
@@ -34,28 +36,14 @@ export default function CreateArticle() {
     setError('');
 
     try {
-      const res = await fetch('/api/admin/articles', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+      await addDoc(collection(db, 'articles'), {
+        ...formData,
+        views: 0,
+        published_at: new Date().toISOString()
       });
-
-      if (res.status === 401) {
-        navigate('/admin/login');
-        return;
-      }
-
-      const data = await res.json();
-      
-      if (res.ok) {
-        navigate('/admin/dashboard');
-      } else {
-        setError(data.error || 'حدث خطأ أثناء حفظ المقال');
-      }
+      navigate('/admin/dashboard');
     } catch (err) {
-      setError('حدث خطأ أثناء الاتصال بالخادم');
+      setError('حدث خطأ أثناء حفظ المقال في قاعدة البيانات');
     } finally {
       setIsLoading(false);
     }

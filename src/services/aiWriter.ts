@@ -1,8 +1,9 @@
 import Parser from 'rss-parser';
 import { GoogleGenAI, Type, Schema } from '@google/genai';
-import { getDb } from '../lib/db';
 import slugify from 'slugify';
 import dotenv from 'dotenv';
+import { collection, query, where, getDocs, addDoc, serverTimestamp, limit } from 'firebase/firestore';
+import { db } from '../lib/firebase';
 
 dotenv.config();
 
@@ -23,8 +24,6 @@ const RSS_FEEDS = [
 export async function fetchAndGenerateArticle() {
   console.log('Starting AI Article Generation Process...');
   try {
-    const db = await getDb();
-    
     // 1. Fetch latest news from RSS feeds
     let latestNewsItem = null;
     for (const feedUrl of RSS_FEEDS) {
@@ -33,8 +32,13 @@ export async function fetchAndGenerateArticle() {
         if (feed.items && feed.items.length > 0) {
           // Find an item we haven't processed yet
           for (const item of feed.items) {
-            const existing = await db.get('SELECT id FROM articles WHERE source_url = ?', [item.link]);
-            if (!existing) {
+            const q = query(
+              collection(db, 'articles'),
+              where('source_url', '==', item.link),
+              limit(1)
+            );
+            const snapshot = await getDocs(q);
+            if (snapshot.empty) {
               latestNewsItem = item;
               break;
             }
@@ -94,7 +98,7 @@ export async function fetchAndGenerateArticle() {
     };
 
     let response;
-    let retries = 8;
+    let retries = 10;
     let delay = 5000; // Start with 5 seconds delay
     let currentModel = 'gemini-3-flash-preview';
 
@@ -122,18 +126,18 @@ export async function fetchAndGenerateArticle() {
         if ((isUnavailable || isRateLimited) && retries > 1) {
           let waitTime = delay;
           if (isRateLimited) {
-            // Extract the suggested retry delay from the error message, default to 65 seconds
+            // Extract the suggested retry delay from the error message, default to 90 seconds
             const match = error?.message?.match(/retry in ([\d\.]+)s/i);
-            waitTime = match ? (Math.ceil(parseFloat(match[1])) + 5) * 1000 : 65000;
+            waitTime = match ? (Math.ceil(parseFloat(match[1])) + 5) * 1000 : 90000;
           } else {
             // Add jitter to 503 wait time
             waitTime = delay + Math.random() * 2000;
             
             // Fallback to other models if 503 persists
-            if (retries === 6) {
+            if (retries === 8) {
               console.log('Switching to gemini-flash-latest due to persistent 503 errors...');
               currentModel = 'gemini-flash-latest';
-            } else if (retries === 3) {
+            } else if (retries === 4) {
               console.log('Switching to gemini-3.1-pro-preview due to persistent 503 errors...');
               currentModel = 'gemini-3.1-pro-preview';
             }
@@ -155,15 +159,16 @@ export async function fetchAndGenerateArticle() {
 
     const generatedData = JSON.parse(response.text);
     
-    // 3. Save to Database
+    // 3. Save to Firestore
     const baseSlug = slugify(generatedData.title, { lower: true, strict: true, locale: 'ar' }) || 'crypto-news';
     let slug = baseSlug;
     let counter = 1;
     
-    // Ensure unique slug
-    while (await db.get('SELECT id FROM articles WHERE slug = ?', [slug])) {
-      slug = `${baseSlug}-${counter}`;
-      counter++;
+    // Ensure unique slug (simple check)
+    const slugQ = query(collection(db, 'articles'), where('slug', '==', slug), limit(1));
+    const slugSnapshot = await getDocs(slugQ);
+    if (!slugSnapshot.empty) {
+      slug = `${baseSlug}-${Date.now()}`;
     }
 
     // Generate a highly relevant, royalty-free AI image using Pollinations.ai based on the keyword
@@ -171,23 +176,21 @@ export async function fetchAndGenerateArticle() {
     const imagePrompt = `High quality professional digital art concept of ${keyword}, finance, trading, crypto blog header`;
     const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(imagePrompt)}?width=1200&height=630&nologo=true`;
 
-    await db.run(
-      `INSERT INTO articles (title, slug, summary, content, image_url, source_url, keywords, status, category) 
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [
-        generatedData.title,
-        slug,
-        generatedData.summary,
-        generatedData.content,
-        imageUrl,
-        latestNewsItem.link,
-        generatedData.keywords,
-        'published', // Save as published by default
-        generatedData.category || 'أخبار'
-      ]
-    );
+    await addDoc(collection(db, 'articles'), {
+      title: generatedData.title,
+      slug: slug,
+      summary: generatedData.summary,
+      content: generatedData.content,
+      image_url: imageUrl,
+      source_url: latestNewsItem.link,
+      keywords: generatedData.keywords,
+      status: 'published',
+      category: generatedData.category || 'أخبار',
+      views: 0,
+      published_at: new Date().toISOString()
+    });
 
-    console.log(`Successfully generated and saved article: ${generatedData.title}`);
+    console.log(`Successfully generated and saved article to Firestore: ${generatedData.title}`);
 
   } catch (error) {
     console.error('Error in AI Article Generation:', error);

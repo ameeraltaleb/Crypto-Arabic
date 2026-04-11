@@ -5,6 +5,8 @@ import { format } from 'date-fns';
 import { ar } from 'date-fns/locale';
 import { TrendingUp, Clock, ChevronLeft, Search, Filter, Flame, BookOpen } from 'lucide-react';
 import FearAndGreedIndex from '../components/FearAndGreedIndex';
+import { collection, query, where, orderBy, limit, getDocs, startAfter, count } from 'firebase/firestore';
+import { db } from '../lib/firebase';
 
 interface Article {
   id: number;
@@ -45,32 +47,66 @@ export default function Home() {
   }, [currentPage, currentCategory, searchParams.get('search')]);
 
   useEffect(() => {
-    fetch('/api/articles/trending')
-      .then(res => res.json())
-      .then(data => setTrending(data))
-      .catch(err => console.error('Failed to fetch trending articles', err));
+    const fetchTrending = async () => {
+      try {
+        const q = query(
+          collection(db, 'articles'),
+          where('status', '==', 'published'),
+          orderBy('views', 'desc'),
+          limit(5)
+        );
+        const snapshot = await getDocs(q);
+        const trendingData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as any));
+        setTrending(trendingData);
+      } catch (err) {
+        console.error('Failed to fetch trending articles', err);
+      }
+    };
+    fetchTrending();
   }, []);
 
-  const fetchArticles = () => {
+  const fetchArticles = async () => {
     setLoading(true);
-    const query = new URLSearchParams({
-      page: currentPage.toString(),
-      limit: '9',
-      category: currentCategory,
-      search: currentSearch
-    }).toString();
+    try {
+      let q = query(
+        collection(db, 'articles'),
+        where('status', '==', 'published'),
+        orderBy('published_at', 'desc')
+      );
 
-    fetch(`/api/articles?${query}`)
-      .then(res => res.json())
-      .then(data => {
-        setArticles(data.articles);
-        setPagination(data.pagination);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error(err);
-        setLoading(false);
+      if (currentCategory !== 'الكل') {
+        q = query(q, where('category', '==', currentCategory));
+      }
+
+      // Simple pagination logic (for a real app, use startAfter)
+      const snapshot = await getDocs(q);
+      let allArticles = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as any));
+
+      // Client-side search for simplicity if needed, or better firestore queries
+      if (currentSearch) {
+        allArticles = allArticles.filter(a => 
+          a.title.includes(currentSearch) || a.summary.includes(currentSearch)
+        );
+      }
+
+      const limitPerPage = 9;
+      const total = allArticles.length;
+      const totalPages = Math.ceil(total / limitPerPage);
+      const start = (currentPage - 1) * limitPerPage;
+      const paginatedArticles = allArticles.slice(start, start + limitPerPage);
+
+      setArticles(paginatedArticles);
+      setPagination({
+        total,
+        page: currentPage,
+        limit: limitPerPage,
+        totalPages
       });
+    } catch (err) {
+      console.error('Error fetching articles:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSearch = (e: React.FormEvent) => {

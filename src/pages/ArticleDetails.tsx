@@ -5,6 +5,8 @@ import ReactMarkdown from 'react-markdown';
 import { format } from 'date-fns';
 import { ar } from 'date-fns/locale';
 import { ArrowRight, Share2, Twitter, Facebook, Link as LinkIcon, ChevronLeft, Clock, BookOpen, MessageCircle } from 'lucide-react';
+import { collection, query, where, limit, getDocs, updateDoc, doc, increment } from 'firebase/firestore';
+import { db } from '../lib/firebase';
 
 interface Article {
   id: number;
@@ -28,27 +30,45 @@ export default function ArticleDetails() {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
-    fetch(`/api/articles/${slug}`)
-      .then(res => res.json())
-      .then(data => {
-        setArticle(data);
-        // Fetch related articles based on category
-        if (data.slug) {
-          fetch(`/api/articles/${data.slug}/related`)
-            .then(res => res.json())
-            .then(relatedData => {
-              setRelatedArticles(relatedData);
-              setLoading(false);
-            });
-        } else {
-          setLoading(false);
+    const fetchArticle = async () => {
+      if (!slug) return;
+      setLoading(true);
+      try {
+        const q = query(
+          collection(db, 'articles'),
+          where('slug', '==', slug),
+          limit(1)
+        );
+        const snapshot = await getDocs(q);
+        
+        if (!snapshot.empty) {
+          const docData = snapshot.docs[0];
+          const data = { id: docData.id, ...docData.data() } as any;
+          setArticle(data);
+
+          // Increment views
+          await updateDoc(doc(db, 'articles', docData.id), {
+            views: increment(1)
+          });
+
+          // Fetch related articles
+          const relatedQ = query(
+            collection(db, 'articles'),
+            where('category', '==', data.category),
+            where('slug', '!=', slug),
+            limit(3)
+          );
+          const relatedSnapshot = await getDocs(relatedQ);
+          setRelatedArticles(relatedSnapshot.docs.map(d => ({ id: d.id, ...d.data() } as any)));
         }
-      })
-      .catch(err => {
-        console.error(err);
+      } catch (err) {
+        console.error('Error fetching article:', err);
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+
+    fetchArticle();
   }, [slug]);
 
   if (loading) {

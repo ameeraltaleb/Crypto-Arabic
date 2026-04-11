@@ -3,6 +3,8 @@ import { TrendingUp, Menu, X, Twitter, Send, Facebook, Instagram, Youtube } from
 import { useState, useEffect } from 'react';
 import CookieConsent from './CookieConsent';
 import CryptoTicker from './CryptoTicker';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../lib/firebase';
 
 export default function Layout() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -10,10 +12,19 @@ export default function Layout() {
   const location = useLocation();
 
   useEffect(() => {
-    fetch('/api/settings')
-      .then(res => res.json())
-      .then(data => setSettings(data))
-      .catch(err => console.error('Failed to fetch settings:', err));
+    const fetchSettings = async () => {
+      try {
+        const snapshot = await getDocs(collection(db, 'settings'));
+        const settingsData: Record<string, string> = {};
+        snapshot.forEach(doc => {
+          settingsData[doc.id] = doc.data().value;
+        });
+        setSettings(settingsData);
+      } catch (err) {
+        console.error('Failed to fetch settings:', err);
+      }
+    };
+    fetchSettings();
   }, []);
 
   const navLinks = [

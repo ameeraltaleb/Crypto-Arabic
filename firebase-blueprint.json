@@ -1,31 +1,43 @@
 {
   "entities": {
-    "Job": {
-      "title": "Job",
-      "description": "A job posting",
+    "Article": {
+      "title": "Article",
+      "description": "A crypto blog article",
       "type": "object",
       "properties": {
         "title": { "type": "string" },
-        "company": { "type": "string" },
-        "location": { "type": "string" },
-        "type": { "type": "string" },
-        "description": { "type": "string" },
-        "sourceUrl": { "type": "string" },
         "slug": { "type": "string" },
-        "datePosted": { "type": "string", "format": "date-time" },
-        "createdAt": { "type": "string", "format": "date-time" },
-        "tags": {
-          "type": "array",
-          "items": { "type": "string" }
-        }
+        "summary": { "type": "string" },
+        "content": { "type": "string" },
+        "image_url": { "type": "string" },
+        "source_url": { "type": "string" },
+        "keywords": { "type": "string" },
+        "category": { "type": "string" },
+        "status": { "type": "string" },
+        "views": { "type": "number" },
+        "published_at": { "type": "string", "format": "date-time" }
       },
-      "required": ["title", "company", "location", "type", "description", "slug"]
+      "required": ["title", "slug", "summary", "content", "category"]
+    },
+    "Setting": {
+      "title": "Setting",
+      "description": "App settings",
+      "type": "object",
+      "properties": {
+        "key": { "type": "string" },
+        "value": { "type": "string" }
+      },
+      "required": ["key", "value"]
     }
   },
   "firestore": {
-    "/jobs/{jobId}": {
-      "schema": { "$ref": "#/entities/Job" },
-      "description": "Job postings"
+    "/articles/{articleId}": {
+      "schema": { "$ref": "#/entities/Article" },
+      "description": "Blog articles"
+    },
+    "/settings/{settingId}": {
+      "schema": { "$ref": "#/entities/Setting" },
+      "description": "App settings"
     }
   }
 }
