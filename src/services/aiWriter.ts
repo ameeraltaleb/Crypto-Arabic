@@ -78,7 +78,7 @@ export async function fetchAndGenerateArticle() {
       5. Use bold text for important terms, and bullet points where appropriate to make it easy to read.
       6. Extract 3-5 relevant SEO keywords in Arabic (comma separated).
       7. Categorize the article into ONE of the following categories: 'أخبار', 'تحليل', 'تعليم', 'عملات بديلة', 'بيتكوين'.
-      8. Provide a single English keyword (e.g., "bitcoin", "trading", "chart", "money", "blockchain") that visually represents the article.
+      8. Provide a highly descriptive English prompt (image_prompt) for an AI image generator. It should visually represent the specific news event in a cinematic, professional digital art style. Do NOT include text or words in the image.
       9. Do not translate word-for-word; adapt the tone for an Arab crypto trader audience.
       10. INTERNAL LINKING: Whenever you mention general terms like "بيتكوين" or "عملات بديلة" or "تداول", wrap them in markdown links pointing to the home page with category filter, e.g., [البيتكوين](/?category=بيتكوين) or [العملات البديلة](/?category=عملات+بديلة).
 
@@ -95,15 +95,15 @@ export async function fetchAndGenerateArticle() {
         content: { type: Type.STRING, description: "Full article content in Markdown format" },
         keywords: { type: Type.STRING, description: "Comma separated Arabic keywords" },
         category: { type: Type.STRING, description: "One of: أخبار, تحليل, تعليم, عملات بديلة, بيتكوين" },
-        image_keyword: { type: Type.STRING, description: "A single English word representing the visual theme (e.g., bitcoin, chart, finance)" }
+        image_prompt: { type: Type.STRING, description: "Highly descriptive English prompt for AI image generation representing the news event" }
       },
-      required: ["title", "summary", "content", "keywords", "category", "image_keyword"]
+      required: ["title", "summary", "content", "keywords", "category", "image_prompt"]
     };
 
     let response;
-    let retries = 10;
+    let retries = 5;
     let delay = 5000; // Start with 5 seconds delay
-    let currentModel = 'gemini-3-flash-preview';
+    let currentModel = 'gemini-2.5-flash';
 
     while (retries > 0) {
       try {
@@ -129,21 +129,21 @@ export async function fetchAndGenerateArticle() {
         if ((isUnavailable || isRateLimited) && retries > 1) {
           let waitTime = delay;
           if (isRateLimited) {
-            // Extract the suggested retry delay from the error message, default to 90 seconds
+            // Extract the suggested retry delay from the error message, default to 10 seconds
             const match = error?.message?.match(/retry in ([\d\.]+)s/i);
-            waitTime = match ? (Math.ceil(parseFloat(match[1])) + 5) * 1000 : 90000;
+            waitTime = match ? (Math.ceil(parseFloat(match[1])) + 2) * 1000 : 10000;
           } else {
             // Add jitter to 503 wait time
             waitTime = delay + Math.random() * 2000;
-            
-            // Fallback to other models if 503 persists
-            if (retries === 8) {
-              console.log('Switching to gemini-flash-latest due to persistent 503 errors...');
-              currentModel = 'gemini-flash-latest';
-            } else if (retries === 4) {
-              console.log('Switching to gemini-3.1-pro-preview due to persistent 503 errors...');
-              currentModel = 'gemini-3.1-pro-preview';
-            }
+          }
+          
+          // Switch model on error to avoid waiting too long
+          if (retries === 4) {
+            console.log(`Switching to gemini-3-flash-preview due to ${isRateLimited ? '429' : '503'} error...`);
+            currentModel = 'gemini-3-flash-preview';
+          } else if (retries === 2) {
+            console.log(`Switching to gemini-flash-latest due to ${isRateLimited ? '429' : '503'} error...`);
+            currentModel = 'gemini-flash-latest';
           }
           
           console.warn(`Gemini API error (${isRateLimited ? '429 Rate Limit' : '503 Unavailable'}) on ${currentModel}. Retries left: ${retries - 1}. Waiting ${Math.round(waitTime)}ms...`);
@@ -174,9 +174,9 @@ export async function fetchAndGenerateArticle() {
       slug = `${baseSlug}-${Date.now()}`;
     }
 
-    // Generate a highly relevant, royalty-free AI image using Pollinations.ai based on the keyword
-    const keyword = generatedData.image_keyword || 'cryptocurrency';
-    const imagePrompt = `Abstract digital art concept of ${keyword}, minimal, crypto finance, no text, no words, high quality`;
+    // Generate a highly relevant, royalty-free AI image using Pollinations.ai based on the detailed prompt
+    const basePrompt = generatedData.image_prompt || 'cryptocurrency trading concept';
+    const imagePrompt = `${basePrompt}, professional digital art, highly detailed, cinematic lighting, no text, no words`;
     const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(imagePrompt)}?width=1200&height=630&nologo=true`;
 
     await addDoc(collection(db, 'articles'), {

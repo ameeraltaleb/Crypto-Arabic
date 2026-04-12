@@ -158,58 +158,90 @@ export default function Home() {
 
       <div className="max-w-7xl mx-auto px-4 py-12 relative z-10">
         
-        {/* Hero Article Section (Editorial Style) */}
+        {/* Featured Bento Grid Section */}
         {!loading && isDefaultView && articles.length > 0 && (
-          <section className="mb-20">
-            <Link 
-              to={`/article/${articles[0].slug}`} 
-              className="group flex flex-col lg:flex-row gap-8 lg:gap-12 items-center bg-gray-900/40 backdrop-blur-sm rounded-[2.5rem] p-4 lg:p-8 border border-gray-800/60 hover:border-green-500/30 hover:bg-gray-900/60 transition-all duration-500 shadow-2xl"
-            >
-              <div className="w-full lg:w-3/5 relative aspect-[16/10] lg:aspect-video rounded-3xl overflow-hidden shadow-2xl">
-                {articles[0].image_url ? (
-                  <img 
-                    src={articles[0].image_url} 
-                    alt={articles[0].title}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    referrerPolicy="no-referrer"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-gray-800 flex items-center justify-center">
-                    <TrendingUp className="w-20 h-20 text-gray-700" />
+          <section className="mb-16">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              {/* Main Featured Article */}
+              <Link 
+                to={`/article/${articles[0].slug}`} 
+                className="lg:col-span-8 group relative rounded-[2.5rem] overflow-hidden border border-gray-800/60 hover:border-green-500/50 transition-all duration-500 shadow-2xl min-h-[400px] lg:min-h-[500px] flex flex-col justify-end"
+              >
+                <div className="absolute inset-0">
+                  {articles[0].image_url ? (
+                    <img 
+                      src={articles[0].image_url} 
+                      alt={articles[0].title}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      referrerPolicy="no-referrer"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gray-800 flex items-center justify-center">
+                      <TrendingUp className="w-20 h-20 text-gray-700" />
+                    </div>
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/40 to-transparent opacity-90 group-hover:opacity-70 transition-opacity"></div>
+                </div>
+                
+                <div className="relative z-10 p-8 lg:p-12 w-full lg:w-4/5">
+                  <div className="flex flex-wrap items-center gap-3 mb-4">
+                    <span className="bg-green-500 text-white text-xs px-4 py-1.5 rounded-full font-bold uppercase tracking-wider shadow-lg shadow-green-500/30">
+                      {articles[0].category || 'أخبار'}
+                    </span>
+                    <span className="flex items-center gap-1.5 text-sm text-gray-300 font-medium bg-gray-900/50 backdrop-blur-md px-3 py-1 rounded-full border border-gray-700/50">
+                      <Clock className="w-4 h-4" />
+                      {format(new Date(articles[0].published_at), 'dd MMMM yyyy', { locale: ar })}
+                    </span>
                   </div>
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-gray-950/80 via-transparent to-transparent opacity-60"></div>
-              </div>
-              
-              <div className="w-full lg:w-2/5 space-y-6 px-2 lg:px-4 py-4">
-                <div className="flex flex-wrap items-center gap-3">
-                  <span className="bg-green-500/10 text-green-500 border border-green-500/20 text-sm px-4 py-1.5 rounded-full font-bold">
-                    {articles[0].category || 'أخبار'}
-                  </span>
-                  <span className="flex items-center gap-1.5 text-sm text-gray-400 font-medium">
-                    <Clock className="w-4 h-4" />
-                    {format(new Date(articles[0].published_at), 'dd MMMM yyyy', { locale: ar })}
-                  </span>
-                  <span className="flex items-center gap-1.5 text-sm text-gray-400 font-medium">
-                    <BookOpen className="w-4 h-4" />
-                    {calculateReadingTime(articles[0].content_length)} دقائق قراءة
-                  </span>
+                  <h2 className="text-3xl lg:text-4xl xl:text-5xl font-extrabold text-white leading-[1.3] mb-4 group-hover:text-green-400 transition-colors drop-shadow-lg">
+                    {articles[0].title}
+                  </h2>
+                  <p className="text-gray-200 text-lg line-clamp-2 mb-6 drop-shadow-md font-medium">
+                    {articles[0].summary}
+                  </p>
                 </div>
-                
-                <h2 className="text-3xl lg:text-4xl xl:text-5xl font-extrabold text-white leading-[1.3] group-hover:text-green-400 transition-colors">
-                  {articles[0].title}
-                </h2>
-                
-                <p className="text-gray-400 text-lg leading-relaxed line-clamp-3">
-                  {articles[0].summary}
-                </p>
-                
-                <div className="pt-4 flex items-center text-green-500 font-bold text-lg group-hover:gap-3 transition-all">
-                  قراءة المقال
-                  <ChevronLeft className="w-5 h-5 mr-2" />
+              </Link>
+
+              {/* Secondary Featured Articles */}
+              {articles.length > 1 && (
+                <div className="lg:col-span-4 flex flex-col gap-6">
+                  {articles.slice(1, 3).map((article) => (
+                    <Link 
+                      key={article.id}
+                      to={`/article/${article.slug}`} 
+                      className="group relative rounded-[2rem] overflow-hidden border border-gray-800/60 hover:border-green-500/50 transition-all duration-500 shadow-xl flex-1 min-h-[200px] lg:min-h-[240px] flex flex-col justify-end"
+                    >
+                      <div className="absolute inset-0">
+                        {article.image_url ? (
+                          <img 
+                            src={article.image_url} 
+                            alt={article.title}
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                            referrerPolicy="no-referrer"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gray-800 flex items-center justify-center">
+                            <TrendingUp className="w-10 h-10 text-gray-700" />
+                          </div>
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/60 to-transparent opacity-90 group-hover:opacity-70 transition-opacity"></div>
+                      </div>
+                      
+                      <div className="relative z-10 p-6">
+                        <div className="flex flex-wrap items-center gap-2 mb-3">
+                          <span className="bg-green-500/90 backdrop-blur-sm text-white text-xs px-3 py-1 rounded-full font-bold shadow-lg">
+                            {article.category || 'أخبار'}
+                          </span>
+                        </div>
+                        <h3 className="text-xl font-bold text-white leading-snug group-hover:text-green-400 transition-colors line-clamp-3 drop-shadow-lg">
+                          {article.title}
+                        </h3>
+                      </div>
+                    </Link>
+                  ))}
                 </div>
-              </div>
-            </Link>
+              )}
+            </div>
           </section>
         )}
 
@@ -219,22 +251,24 @@ export default function Home() {
             {/* Categories Filter */}
             <section className="mb-10">
               <div className="flex items-center gap-3 overflow-x-auto pb-4 scrollbar-hide">
-                <div className="bg-gray-900 border border-gray-800 p-2.5 rounded-xl shrink-0 ml-2">
-                  <Filter className="w-5 h-5 text-gray-400" />
+                <div className="bg-gray-900/80 backdrop-blur-md border border-gray-800 p-2.5 rounded-2xl shrink-0 ml-2 shadow-lg">
+                  <Filter className="w-5 h-5 text-green-500" />
                 </div>
-                {CATEGORIES.map(category => (
-                  <button
-                    key={category}
-                    onClick={() => handleCategoryChange(category)}
-                    className={`shrink-0 px-6 py-2.5 rounded-xl text-sm font-bold transition-all ${
-                      currentCategory === category
-                        ? 'bg-green-500 text-white shadow-lg shadow-green-500/25 scale-105'
-                        : 'bg-gray-900/50 text-gray-400 hover:bg-gray-800 hover:text-white border border-gray-800/60'
-                    }`}
-                  >
-                    {category}
-                  </button>
-                ))}
+                <div className="flex bg-gray-900/40 backdrop-blur-sm border border-gray-800/60 p-1.5 rounded-2xl">
+                  {CATEGORIES.map(category => (
+                    <button
+                      key={category}
+                      onClick={() => handleCategoryChange(category)}
+                      className={`shrink-0 px-6 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 ${
+                        currentCategory === category
+                          ? 'bg-green-500 text-white shadow-lg shadow-green-500/30'
+                          : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
+                      }`}
+                    >
+                      {category}
+                    </button>
+                  ))}
+                </div>
               </div>
             </section>
 
@@ -252,14 +286,14 @@ export default function Home() {
                     <div key={i} className="animate-pulse bg-gray-900/50 rounded-3xl h-[400px] border border-gray-800/60"></div>
                   ))}
                 </div>
-              ) : (isDefaultView ? articles.slice(1) : articles).length === 0 ? (
+              ) : (isDefaultView ? articles.slice(3) : articles).length === 0 ? (
                 <div className="text-center py-20 bg-gray-900/50 rounded-3xl border border-gray-800/60">
                   <p className="text-gray-400 text-lg">لم يتم العثور على مقالات تطابق بحثك.</p>
                 </div>
               ) : (
                 <>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-                    {(isDefaultView ? articles.slice(1) : articles).map((article) => (
+                    {(isDefaultView ? articles.slice(3) : articles).map((article) => (
                       <Link 
                         key={article.id} 
                         to={`/article/${article.slug}`}
@@ -377,6 +411,26 @@ export default function Home() {
 
             {/* Fear and Greed Index Widget */}
             <FearAndGreedIndex />
+
+            {/* Telegram Community Widget */}
+            <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-3xl p-8 shadow-xl relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-3xl -mr-10 -mt-10 transition-transform group-hover:scale-150"></div>
+              <div className="relative z-10">
+                <h3 className="text-2xl font-extrabold text-white mb-3">انضم لمجتمعنا!</h3>
+                <p className="text-blue-100 mb-6 text-sm leading-relaxed">
+                  احصل على أحدث الأخبار والتحليلات الحصرية مباشرة على هاتفك عبر قناتنا على تيليجرام.
+                </p>
+                <a 
+                  href="https://t.me/your_channel" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center w-full bg-white text-blue-700 font-bold py-3 px-6 rounded-xl hover:bg-blue-50 transition-colors shadow-lg"
+                >
+                  <svg className="w-5 h-5 ml-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+                  انضم للقناة الآن
+                </a>
+              </div>
+            </div>
 
             {/* Trending Widget */}
             {trending.length > 0 && (
