@@ -11,6 +11,7 @@ import { AuthProvider } from './lib/AuthContext';
 // Lazy load pages for better performance (Code Splitting)
 const Home = lazy(() => import('./pages/Home'));
 const ArticleDetails = lazy(() => import('./pages/ArticleDetails'));
+const Market = lazy(() => import('./pages/Market'));
 const About = lazy(() => import('./pages/About'));
 const Privacy = lazy(() => import('./pages/Privacy'));
 const Terms = lazy(() => import('./pages/Terms'));
@@ -34,6 +35,7 @@ export default function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="article/:slug" element={<ArticleDetails />} />
+            <Route path="market" element={<Market />} />
             <Route path="about" element={<About />} />
             <Route path="privacy" element={<Privacy />} />
             <Route path="terms" element={<Terms />} />
