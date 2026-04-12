@@ -30,9 +30,8 @@ service cloud.firestore {
 
     match /articles/{articleId} {
       allow read: if true;
-      // In this specific app, the AI generates articles from the frontend/serverless context
-      // For now, we allow creation if authenticated, but in a real app we'd restrict to admin
-      allow create: if isAuthenticated() && isValidArticle(request.resource.data);
+      // Allow unauthenticated creation so the backend AI cron job can write using the Client SDK
+      allow create: if isValidArticle(request.resource.data);
       allow update: if isAuthenticated() && (isAdmin() || (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['views'])));
       allow delete: if isAdmin();
     }

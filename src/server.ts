@@ -8,8 +8,9 @@ import cron from 'node-cron';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import jwt from 'jsonwebtoken';
-import { getDb } from './lib/db';
 import { fetchAndGenerateArticle } from './services/aiWriter';
+import { db as firestore } from './lib/firebase';
+import { collection, getDocs, getDoc, doc, addDoc, updateDoc, deleteDoc, query, where, orderBy, limit, startAfter, getCountFromServer } from 'firebase/firestore';
 
 dotenv.config();
 
@@ -24,9 +25,6 @@ const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
 async function startServer() {
   const app = express();
   const PORT = 3000;
-
-  // Initialize DB
-  await getDb();
 
   // Middleware
   app.use(compression());
@@ -74,8 +72,9 @@ async function startServer() {
   // Admin Article Management
   app.get('/api/admin/articles', authenticateAdmin, async (req, res) => {
     try {
-      const db = await getDb();
-      const articles = await db.all('SELECT id, title, slug, status, views, category, published_at FROM articles ORDER BY published_at DESC');
+      const q = query(collection(firestore, 'articles'), orderBy('published_at', 'desc'));
+      const snapshot = await getDocs(q);
+      const articles = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       res.json(articles);
     } catch (error) {
       res.status(500).json({ error: 'Failed to fetch articles' });
@@ -84,19 +83,18 @@ async function startServer() {
 
   app.post('/api/admin/articles', authenticateAdmin, async (req, res) => {
     try {
-      const db = await getDb();
       const { title, slug, summary, content, status, image_url, keywords, category } = req.body;
       
-      // Check if slug exists
-      const existing = await db.get('SELECT id FROM articles WHERE slug = ?', [slug]);
-      if (existing) {
+      const q = query(collection(firestore, 'articles'), where('slug', '==', slug));
+      const snapshot = await getDocs(q);
+      if (!snapshot.empty) {
         return res.status(400).json({ error: 'Slug already exists' });
       }
 
-      await db.run(
-        'INSERT INTO articles (title, slug, summary, content, status, image_url, keywords, category) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-        [title, slug, summary, content, status, image_url, keywords, category || 'أخبار']
-      );
+      await addDoc(collection(firestore, 'articles'), {
+        title, slug, summary, content, status, image_url, keywords, category: category || 'أخبار',
+        views: 0, published_at: new Date().toISOString()
+      });
       res.json({ success: true });
     } catch (error) {
       res.status(500).json({ error: 'Failed to create article' });
@@ -105,12 +103,10 @@ async function startServer() {
 
   app.put('/api/admin/articles/:id', authenticateAdmin, async (req, res) => {
     try {
-      const db = await getDb();
       const { title, summary, content, status, image_url, keywords, category } = req.body;
-      await db.run(
-        'UPDATE articles SET title = ?, summary = ?, content = ?, status = ?, image_url = ?, keywords = ?, category = ? WHERE id = ?',
-        [title, summary, content, status, image_url, keywords, category || 'أخبار', req.params.id]
-      );
+      await updateDoc(doc(firestore, 'articles', req.params.id), {
+        title, summary, content, status, image_url, keywords, category: category || 'أخبار'
+      });
       res.json({ success: true });
     } catch (error) {
       res.status(500).json({ error: 'Failed to update article' });
@@ -119,8 +115,7 @@ async function startServer() {
 
   app.delete('/api/admin/articles/:id', authenticateAdmin, async (req, res) => {
     try {
-      const db = await getDb();
-      await db.run('DELETE FROM articles WHERE id = ?', [req.params.id]);
+      await deleteDoc(doc(firestore, 'articles', req.params.id));
       res.json({ success: true });
     } catch (error) {
       res.status(500).json({ error: 'Failed to delete article' });
@@ -130,12 +125,11 @@ async function startServer() {
   // Settings Routes
   app.get('/api/settings', async (req, res) => {
     try {
-      const db = await getDb();
-      const settings = await db.all('SELECT key, value FROM settings');
-      const settingsObj = settings.reduce((acc, curr) => {
-        acc[curr.key] = curr.value;
-        return acc;
-      }, {} as Record<string, string>);
+      const snapshot = await getDocs(collection(firestore, 'settings'));
+      const settingsObj: Record<string, string> = {};
+      snapshot.forEach(doc => {
+        settingsObj[doc.id] = doc.data().value;
+      });
       res.json(settingsObj);
     } catch (error) {
       res.status(500).json({ error: 'Failed to fetch settings' });
@@ -144,24 +138,14 @@ async function startServer() {
 
   app.post('/api/admin/settings', authenticateAdmin, async (req, res) => {
     try {
-      const db = await getDb();
-      const settings = req.body; // Expecting { key: value, ... }
-      
-      // Begin transaction
-      await db.run('BEGIN TRANSACTION');
-      
+      const settings = req.body;
       for (const [key, value] of Object.entries(settings)) {
-        await db.run(
-          'INSERT INTO settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = ?',
-          [key, value, value]
-        );
+        // Use setDoc with merge to update or create
+        const { setDoc } = await import('firebase/firestore');
+        await setDoc(doc(firestore, 'settings', key), { key, value }, { merge: true });
       }
-      
-      await db.run('COMMIT');
       res.json({ success: true });
     } catch (error) {
-      const db = await getDb();
-      await db.run('ROLLBACK');
       res.status(500).json({ error: 'Failed to update settings' });
     }
   });
@@ -169,8 +153,12 @@ async function startServer() {
   // Public Routes
   app.get('/api/articles/trending', async (req, res) => {
     try {
-      const db = await getDb();
-      const articles = await db.all("SELECT id, title, slug, image_url, published_at, views, category, LENGTH(content) as content_length FROM articles WHERE status = 'published' ORDER BY views DESC, published_at DESC LIMIT 5");
+      const q = query(collection(firestore, 'articles'), where('status', '==', 'published'), orderBy('views', 'desc'), limit(5));
+      const snapshot = await getDocs(q);
+      const articles = snapshot.docs.map(doc => {
+        const data = doc.data();
+        return { id: doc.id, ...data, content_length: data.content?.length || 0 };
+      });
       res.json(articles);
     } catch (error) {
       console.error('Error fetching trending articles:', error);
@@ -180,45 +168,49 @@ async function startServer() {
 
   app.get('/api/articles', async (req, res) => {
     try {
-      const db = await getDb();
       const page = parseInt(req.query.page as string) || 1;
-      const limit = parseInt(req.query.limit as string) || 9;
+      const limitNum = parseInt(req.query.limit as string) || 9;
       const search = req.query.search as string || '';
       const category = req.query.category as string || '';
-      const offset = (page - 1) * limit;
 
-      let query = "SELECT id, title, slug, summary, image_url, published_at, views, category, LENGTH(content) as content_length FROM articles WHERE status = 'published'";
-      let countQuery = "SELECT COUNT(*) as total FROM articles WHERE status = 'published'";
-      const params: any[] = [];
+      let q = query(collection(firestore, 'articles'), where('status', '==', 'published'));
+      
+      if (category && category !== 'الكل') {
+        q = query(q, where('category', '==', category));
+      }
+
+      // Note: Firestore doesn't support native full-text search with LIKE. 
+      // We will fetch all matching category/status and filter in memory for search.
+      // For a real app, Algolia or Typesense is recommended.
+      const snapshot = await getDocs(q);
+      let allArticles = snapshot.docs.map(doc => {
+        const data = doc.data();
+        return { id: doc.id, ...data, content_length: data.content?.length || 0 };
+      });
+
+      // Sort by published_at desc
+      allArticles.sort((a: any, b: any) => new Date(b.published_at).getTime() - new Date(a.published_at).getTime());
 
       if (search) {
-        query += " AND (title LIKE ? OR summary LIKE ? OR content LIKE ?)";
-        countQuery += " AND (title LIKE ? OR summary LIKE ? OR content LIKE ?)";
-        const searchParam = `%${search}%`;
-        params.push(searchParam, searchParam, searchParam);
+        const s = search.toLowerCase();
+        allArticles = allArticles.filter((a: any) => 
+          (a.title && a.title.toLowerCase().includes(s)) || 
+          (a.summary && a.summary.toLowerCase().includes(s)) || 
+          (a.content && a.content.toLowerCase().includes(s))
+        );
       }
 
-      if (category && category !== 'الكل') {
-        query += " AND category = ?";
-        countQuery += " AND category = ?";
-        params.push(category);
-      }
+      const total = allArticles.length;
+      const offset = (page - 1) * limitNum;
+      const paginatedArticles = allArticles.slice(offset, offset + limitNum);
 
-      query += " ORDER BY published_at DESC LIMIT ? OFFSET ?";
-      
-      const totalResult = await db.get(countQuery, params);
-      const total = totalResult.total;
-      
-      params.push(limit, offset);
-      const articles = await db.all(query, params);
-      
       res.json({
-        articles,
+        articles: paginatedArticles,
         pagination: {
           total,
           page,
-          limit,
-          totalPages: Math.ceil(total / limit)
+          limit: limitNum,
+          totalPages: Math.ceil(total / limitNum)
         }
       });
     } catch (error) {
@@ -229,18 +221,22 @@ async function startServer() {
 
   app.get('/api/articles/:slug/related', async (req, res) => {
     try {
-      const db = await getDb();
       const { slug } = req.params;
       
-      // Get current article category
-      const currentArticle = await db.get("SELECT id, category FROM articles WHERE slug = ?", [slug]);
-      if (!currentArticle) return res.status(404).json({ error: 'Article not found' });
+      const q1 = query(collection(firestore, 'articles'), where('slug', '==', slug), limit(1));
+      const snap1 = await getDocs(q1);
+      if (snap1.empty) return res.status(404).json({ error: 'Article not found' });
+      
+      const currentArticle = snap1.docs[0].data();
+      const currentId = snap1.docs[0].id;
 
-      // Fetch related articles from same category
-      const articles = await db.all(
-        "SELECT id, title, slug, image_url, published_at, category, LENGTH(content) as content_length FROM articles WHERE status = 'published' AND category = ? AND id != ? ORDER BY published_at DESC LIMIT 3",
-        [currentArticle.category, currentArticle.id]
-      );
+      const q2 = query(collection(firestore, 'articles'), where('status', '==', 'published'), where('category', '==', currentArticle.category), limit(4));
+      const snap2 = await getDocs(q2);
+      
+      const articles = snap2.docs
+        .filter(doc => doc.id !== currentId)
+        .slice(0, 3)
+        .map(doc => ({ id: doc.id, ...doc.data() }));
       
       res.json(articles);
     } catch (error) {
@@ -250,12 +246,17 @@ async function startServer() {
 
   app.get('/api/articles/:slug', async (req, res) => {
     try {
-      const db = await getDb();
-      const article = await db.get("SELECT * FROM articles WHERE slug = ? AND status = 'published'", [req.params.slug]);
-      if (!article) return res.status(404).json({ error: 'Article not found' });
+      const q = query(collection(firestore, 'articles'), where('slug', '==', req.params.slug), where('status', '==', 'published'), limit(1));
+      const snapshot = await getDocs(q);
+      if (snapshot.empty) return res.status(404).json({ error: 'Article not found' });
+      
+      const docSnap = snapshot.docs[0];
+      const article = { id: docSnap.id, ...docSnap.data() };
       
       // Increment views
-      await db.run('UPDATE articles SET views = views + 1 WHERE id = ?', [article.id]);
+      await updateDoc(doc(firestore, 'articles', docSnap.id), {
+        views: (article.views as number || 0) + 1
+      });
       
       res.json(article);
     } catch (error) {
@@ -266,8 +267,9 @@ async function startServer() {
   // Dynamic Sitemap for Google Search Console
   app.get('/sitemap.xml', async (req, res) => {
     try {
-      const db = await getDb();
-      const articles = await db.all("SELECT slug, published_at FROM articles WHERE status = 'published' ORDER BY published_at DESC");
+      const q = query(collection(firestore, 'articles'), where('status', '==', 'published'));
+      const snapshot = await getDocs(q);
+      const articles = snapshot.docs.map(doc => doc.data());
       
       const baseUrl = process.env.APP_URL || `${req.protocol}://${req.get('host')}`; 
 
@@ -296,8 +298,10 @@ async function startServer() {
   // RSS Feed
   app.get('/rss.xml', async (req, res) => {
     try {
-      const db = await getDb();
-      const articles = await db.all("SELECT * FROM articles WHERE status = 'published' ORDER BY published_at DESC LIMIT 20");
+      const q = query(collection(firestore, 'articles'), where('status', '==', 'published'), orderBy('published_at', 'desc'), limit(20));
+      const snapshot = await getDocs(q);
+      const articles = snapshot.docs.map(doc => doc.data());
+      
       const baseUrl = process.env.APP_URL || `${req.protocol}://${req.get('host')}`; 
 
       let xml = '<?xml version="1.0" encoding="UTF-8" ?>\n';

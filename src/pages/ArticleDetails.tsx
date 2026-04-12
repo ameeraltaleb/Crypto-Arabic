@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { format } from 'date-fns';
 import { ar } from 'date-fns/locale';
 import { ArrowRight, Share2, Twitter, Facebook, Link as LinkIcon, ChevronLeft, Clock, BookOpen, MessageCircle } from 'lucide-react';
@@ -44,6 +45,13 @@ export default function ArticleDetails() {
         if (!snapshot.empty) {
           const docData = snapshot.docs[0];
           const data = { id: docData.id, ...docData.data() } as any;
+          
+          // Fix potential markdown formatting issues from AI
+          // Sometimes AI escapes newlines like \n instead of actual newlines
+          if (data.content && typeof data.content === 'string') {
+            data.content = data.content.replace(/\\n/g, '\n');
+          }
+          
           setArticle(data);
 
           // Increment views
@@ -247,7 +255,7 @@ export default function ArticleDetails() {
       </header>
 
       <div className="prose prose-invert prose-green max-w-none prose-img:rounded-2xl prose-img:shadow-xl prose-headings:text-gray-100 prose-a:text-green-500 hover:prose-a:text-green-400 prose-p:text-gray-300 prose-p:leading-relaxed prose-li:text-gray-300">
-        <ReactMarkdown>{article.content}</ReactMarkdown>
+        <ReactMarkdown remarkPlugins={[remarkGfm]}>{article.content}</ReactMarkdown>
       </div>
 
       {article.source_url && (
