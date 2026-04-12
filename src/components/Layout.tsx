@@ -92,43 +92,43 @@ export default function Layout() {
             </button>
           </div>
         </div>
-
-        {/* Mobile Nav Overlay */}
-        {isMenuOpen && (
-          <div className="md:hidden fixed inset-0 z-[60] bg-gray-950/95 backdrop-blur-xl flex flex-col">
-            <div className="flex justify-between items-center h-20 px-4 border-b border-gray-800/60">
-              <Link to="/" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-3">
-                <div className="bg-gradient-to-br from-green-400 to-emerald-600 text-white p-2 rounded-lg">
-                  <TrendingUp className="w-5 h-5" />
-                </div>
-                <span className="text-xl font-bold text-white tracking-tight">كريبتو بالعربي</span>
-              </Link>
-              <button
-                onClick={() => setIsMenuOpen(false)}
-                className="p-2 text-gray-400 hover:text-white transition-colors bg-gray-900 rounded-xl border border-gray-800"
-              >
-                <X className="w-6 h-6" />
-              </button>
-            </div>
-            <div className="flex flex-col px-6 py-8 gap-3 overflow-y-auto">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                  onClick={() => setIsMenuOpen(false)}
-                  className={`block px-6 py-4 rounded-2xl text-lg font-bold transition-all ${
-                    isActive(link.path)
-                      ? 'bg-green-500/10 text-green-500 border border-green-500/20'
-                      : 'text-gray-300 hover:bg-gray-800 hover:text-white border border-transparent'
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
       </header>
+
+      {/* Mobile Nav Overlay */}
+      {isMenuOpen && (
+        <div className="md:hidden fixed inset-0 z-[100] bg-gray-950/95 backdrop-blur-xl flex flex-col">
+          <div className="flex justify-between items-center h-20 px-4 border-b border-gray-800/60">
+            <Link to="/" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-3">
+              <div className="bg-gradient-to-br from-green-400 to-emerald-600 text-white p-2 rounded-lg">
+                <TrendingUp className="w-5 h-5" />
+              </div>
+              <span className="text-xl font-bold text-white tracking-tight">كريبتو بالعربي</span>
+            </Link>
+            <button
+              onClick={() => setIsMenuOpen(false)}
+              className="p-2 text-gray-400 hover:text-white transition-colors bg-gray-900 rounded-xl border border-gray-800"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </div>
+          <div className="flex flex-col px-6 py-8 gap-3 overflow-y-auto">
+            {navLinks.map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                onClick={() => setIsMenuOpen(false)}
+                className={`block px-6 py-4 rounded-2xl text-lg font-bold transition-all ${
+                  isActive(link.path)
+                    ? 'bg-green-500/10 text-green-500 border border-green-500/20'
+                    : 'text-gray-300 hover:bg-gray-800 hover:text-white border border-transparent'
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Main Content */}
       <main className="flex-grow">
