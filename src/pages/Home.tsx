@@ -153,8 +153,10 @@ export default function Home() {
       </Helmet>
 
       {/* Web3 Background Aesthetics */}
-      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay pointer-events-none"></div>
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] opacity-20 pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(34,197,94,0.3) 0%, rgba(0,0,0,0) 70%)' }}></div>
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay"></div>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] opacity-20" style={{ background: 'radial-gradient(circle, rgba(34,197,94,0.3) 0%, rgba(0,0,0,0) 70%)' }}></div>
+      </div>
 
       <div className="max-w-7xl mx-auto px-4 py-12 relative z-10">
         
@@ -255,7 +257,7 @@ export default function Home() {
                 <div className="bg-gray-900/80 backdrop-blur-md border border-gray-800 p-2.5 rounded-2xl shrink-0 ml-2 shadow-lg">
                   <Filter className="w-5 h-5 text-green-500" />
                 </div>
-                <div className="flex bg-gray-900/40 backdrop-blur-sm border border-gray-800/60 p-1.5 rounded-2xl">
+                <div className="flex bg-gray-900/40 backdrop-blur-sm border border-gray-800/60 p-1.5 rounded-2xl shrink-0 w-max">
                   {CATEGORIES.map(category => (
                     <button
                       key={category}
@@ -351,7 +353,7 @@ export default function Home() {
                         السابق
                       </button>
                       
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-1 flex-wrap justify-center">
                         {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map(page => (
                           <button
                             key={page}
@@ -398,7 +400,7 @@ export default function Home() {
                     value={searchInput}
                     onChange={(e) => setSearchInput(e.target.value)}
                     placeholder="ابحث عن عملة، خبر..."
-                    className="w-full bg-gray-950 border border-gray-800 rounded-2xl py-4 px-5 text-white focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-all placeholder:text-gray-600"
+                    className="w-full bg-gray-950 border border-gray-800 rounded-2xl py-4 pr-5 pl-16 text-white focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-all placeholder:text-gray-600"
                   />
                   <button 
                     type="submit"

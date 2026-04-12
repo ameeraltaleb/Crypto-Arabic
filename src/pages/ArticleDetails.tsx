@@ -288,7 +288,7 @@ export default function ArticleDetails() {
         </div>
       </header>
 
-      <div className="prose prose-invert prose-green max-w-none prose-img:rounded-2xl prose-img:shadow-xl prose-headings:text-gray-100 prose-a:text-green-500 hover:prose-a:text-green-400 prose-p:text-gray-300 prose-p:leading-relaxed prose-li:text-gray-300">
+      <div className="prose prose-invert prose-green max-w-none prose-img:rounded-2xl prose-img:shadow-xl prose-headings:text-gray-100 prose-a:text-green-500 hover:prose-a:text-green-400 prose-p:text-gray-300 prose-p:leading-relaxed prose-li:text-gray-300 break-words prose-pre:overflow-x-auto">
         <ReactMarkdown remarkPlugins={[remarkGfm]}>{article.content}</ReactMarkdown>
       </div>
 

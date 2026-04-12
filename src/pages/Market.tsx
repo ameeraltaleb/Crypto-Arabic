@@ -108,12 +108,14 @@ export default function Market() {
       </Helmet>
 
       {/* Background Aesthetics */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] opacity-20 pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.3) 0%, rgba(0,0,0,0) 70%)' }}></div>
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] opacity-20" style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.3) 0%, rgba(0,0,0,0) 70%)' }}></div>
+      </div>
 
       <div className="max-w-7xl mx-auto px-4 relative z-10">
         
         {/* Header Section */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 bg-gray-900/40 backdrop-blur-sm p-8 rounded-[2rem] border border-gray-800/60 shadow-2xl">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 bg-gray-900/40 backdrop-blur-sm p-5 md:p-8 rounded-[2rem] border border-gray-800/60 shadow-2xl">
           <div>
             <div className="flex items-center gap-3 mb-4">
               <div className="bg-blue-500/10 p-3 rounded-xl">

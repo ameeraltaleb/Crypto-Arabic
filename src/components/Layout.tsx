@@ -12,6 +12,17 @@ export default function Layout() {
   const location = useLocation();
 
   useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMenuOpen]);
+
+  useEffect(() => {
     const fetchSettings = async () => {
       try {
         const snapshot = await getDocs(collection(db, 'settings'));
@@ -48,11 +59,11 @@ export default function Layout() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-20 items-center">
             {/* Logo */}
-            <Link to="/" className="flex items-center gap-3 group">
-              <div className="bg-gradient-to-br from-green-400 to-emerald-600 text-white p-2.5 rounded-xl group-hover:scale-105 transition-transform shadow-lg shadow-green-500/20">
-                <TrendingUp className="w-6 h-6" />
+            <Link to="/" className="flex items-center gap-2 sm:gap-3 group shrink-0">
+              <div className="bg-gradient-to-br from-green-400 to-emerald-600 text-white p-2 sm:p-2.5 rounded-xl group-hover:scale-105 transition-transform shadow-lg shadow-green-500/20">
+                <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6" />
               </div>
-              <span className="text-2xl font-bold text-white tracking-tight">
+              <span className="text-lg sm:text-2xl font-bold text-white tracking-tight">
                 كريبتو <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600">بالعربي</span>
               </span>
             </Link>
@@ -84,7 +95,7 @@ export default function Layout() {
 
         {/* Mobile Nav Overlay */}
         {isMenuOpen && (
-          <div className="md:hidden fixed inset-0 z-50 bg-gray-950/95 backdrop-blur-xl flex flex-col">
+          <div className="md:hidden fixed inset-0 z-[60] bg-gray-950/95 backdrop-blur-xl flex flex-col">
             <div className="flex justify-between items-center h-20 px-4 border-b border-gray-800/60">
               <Link to="/" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-3">
                 <div className="bg-gradient-to-br from-green-400 to-emerald-600 text-white p-2 rounded-lg">
