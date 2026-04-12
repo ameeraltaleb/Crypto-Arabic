@@ -75,11 +75,29 @@ export default function ArticleDetails() {
           const relatedQ = query(
             collection(db, 'articles'),
             where('category', '==', data.category),
-            where('slug', '!=', slug),
-            limit(3)
+            limit(4)
           );
           const relatedSnapshot = await getDocs(relatedQ);
-          setRelatedArticles(relatedSnapshot.docs.map(d => ({ id: d.id, ...d.data() } as any)));
+          let related = relatedSnapshot.docs
+            .map(d => ({ id: d.id, ...d.data() } as any))
+            .filter(a => a.slug !== slug)
+            .slice(0, 3);
+
+          // Fallback: If no related articles in the same category, fetch latest articles
+          if (related.length === 0) {
+            const fallbackQ = query(
+              collection(db, 'articles'),
+              where('status', '==', 'published'),
+              limit(4)
+            );
+            const fallbackSnapshot = await getDocs(fallbackQ);
+            related = fallbackSnapshot.docs
+              .map(d => ({ id: d.id, ...d.data() } as any))
+              .filter(a => a.slug !== slug)
+              .slice(0, 3);
+          }
+          
+          setRelatedArticles(related);
         }
       } catch (err) {
         console.error('Error fetching article:', err);
