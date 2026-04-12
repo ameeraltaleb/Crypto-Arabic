@@ -18,7 +18,9 @@ const RSS_FEEDS = [
   'https://www.coindesk.com/arc/outboundfeeds/rss/',
   'https://cryptoslate.com/feed/',
   'https://bitcoinmagazine.com/.rss/full/',
-  'https://decrypt.co/feed'
+  'https://decrypt.co/feed',
+  'https://blockworks.co/feed',
+  'https://thedefiant.io/api/feed'
 ];
 
 export async function fetchAndGenerateArticle() {
@@ -78,6 +80,7 @@ export async function fetchAndGenerateArticle() {
       7. Categorize the article into ONE of the following categories: 'أخبار', 'تحليل', 'تعليم', 'عملات بديلة', 'بيتكوين'.
       8. Provide a single English keyword (e.g., "bitcoin", "trading", "chart", "money", "blockchain") that visually represents the article.
       9. Do not translate word-for-word; adapt the tone for an Arab crypto trader audience.
+      10. INTERNAL LINKING: Whenever you mention general terms like "بيتكوين" or "عملات بديلة" or "تداول", wrap them in markdown links pointing to the home page with category filter, e.g., [البيتكوين](/?category=بيتكوين) or [العملات البديلة](/?category=عملات+بديلة).
 
       Source Title: ${latestNewsItem.title}
       Source Content/Snippet: ${latestNewsItem.contentSnippet || latestNewsItem.content}
@@ -173,7 +176,7 @@ export async function fetchAndGenerateArticle() {
 
     // Generate a highly relevant, royalty-free AI image using Pollinations.ai based on the keyword
     const keyword = generatedData.image_keyword || 'cryptocurrency';
-    const imagePrompt = `High quality professional digital art concept of ${keyword}, finance, trading, crypto blog header`;
+    const imagePrompt = `Abstract digital art concept of ${keyword}, minimal, crypto finance, no text, no words, high quality`;
     const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(imagePrompt)}?width=1200&height=630&nologo=true`;
 
     await addDoc(collection(db, 'articles'), {
@@ -191,6 +194,24 @@ export async function fetchAndGenerateArticle() {
     });
 
     console.log(`Successfully generated and saved article to Firestore: ${generatedData.title}`);
+
+    // Post to Telegram if configured
+    const botToken = process.env.TELEGRAM_BOT_TOKEN;
+    const chatId = process.env.TELEGRAM_CHAT_ID;
+    if (botToken && chatId) {
+      try {
+        const appUrl = process.env.APP_URL || 'https://crypto-blog.com';
+        const text = `🚀 *${generatedData.title}*\n\n${generatedData.summary}\n\n🔗 اقرأ المزيد:\n${appUrl}/article/${slug}`;
+        await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ chat_id: chatId, text, parse_mode: 'Markdown' })
+        });
+        console.log('Successfully posted to Telegram');
+      } catch (e) {
+        console.error('Failed to post to Telegram:', e);
+      }
+    }
 
   } catch (error) {
     console.error('Error in AI Article Generation:', error);

@@ -150,6 +150,20 @@ async function startServer() {
     }
   });
 
+  // External Cron Endpoint
+  app.get('/api/cron/generate', async (req, res) => {
+    const authHeader = req.headers.authorization;
+    const cronSecret = process.env.CRON_SECRET;
+    
+    if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+    
+    // Run in background
+    fetchAndGenerateArticle().catch(console.error);
+    res.json({ success: true, message: 'Article generation started in background' });
+  });
+
   // Public Routes
   app.get('/api/articles/trending', async (req, res) => {
     try {

@@ -29,6 +29,18 @@ export default function ArticleDetails() {
   const [relatedArticles, setRelatedArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const totalScroll = document.documentElement.scrollTop;
+      const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scroll = `${totalScroll / windowHeight}`;
+      setScrollProgress(Number(scroll));
+    }
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     const fetchArticle = async () => {
@@ -140,8 +152,12 @@ export default function ArticleDetails() {
   };
 
   return (
-    <article className="max-w-4xl mx-auto px-4 py-8">
-      <Helmet>
+    <>
+      <div className="fixed top-0 left-0 w-full h-1.5 bg-gray-900 z-50">
+        <div className="h-full bg-green-500 transition-all duration-150" style={{ width: `${scrollProgress * 100}%` }}></div>
+      </div>
+      <article className="max-w-4xl mx-auto px-4 py-8">
+        <Helmet>
         <title>{article.title} | كريبتو بالعربي</title>
         <meta name="description" content={article.summary} />
         <meta name="keywords" content={article.keywords} />
@@ -319,5 +335,6 @@ export default function ArticleDetails() {
         </section>
       )}
     </article>
+    </>
   );
 }
