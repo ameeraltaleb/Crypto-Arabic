@@ -147,8 +147,8 @@ export default function Market() {
           </div>
         </div>
 
-        {/* Market Table */}
-        <div className="bg-gray-900/40 backdrop-blur-sm rounded-[2rem] border border-gray-800/60 shadow-2xl overflow-hidden">
+        {/* Desktop Market Table */}
+        <div className="hidden md:block bg-gray-900/40 backdrop-blur-sm rounded-[2rem] border border-gray-800/60 shadow-2xl overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-right border-collapse">
               <thead>
@@ -229,6 +229,63 @@ export default function Market() {
               </tbody>
             </table>
           </div>
+        </div>
+
+        {/* Mobile Market Cards */}
+        <div className="md:hidden flex flex-col gap-4">
+          {loading ? (
+            Array.from({ length: 10 }).map((_, i) => (
+              <div key={i} className="bg-gray-900/40 border border-gray-800/60 rounded-2xl p-5 animate-pulse">
+                <div className="flex justify-between items-center mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 bg-gray-800 rounded-full"></div>
+                    <div className="h-4 bg-gray-800 rounded w-20"></div>
+                  </div>
+                  <div className="h-4 bg-gray-800 rounded w-16"></div>
+                </div>
+                <div className="h-3 bg-gray-800 rounded w-full"></div>
+              </div>
+            ))
+          ) : (
+            coins.map((coin) => (
+              <div key={coin.id} className="bg-gray-900/40 backdrop-blur-sm border border-gray-800/60 rounded-2xl p-5 shadow-lg">
+                <div className="flex justify-between items-center mb-4">
+                  <div className="flex items-center gap-3">
+                    <span className="text-gray-500 font-bold text-xs">#{coin.market_cap_rank}</span>
+                    <img src={coin.image} alt={coin.name} className="w-8 h-8 rounded-full shadow-md" />
+                    <div className="flex flex-col">
+                      <span className="font-bold text-gray-100 text-sm">{coin.name}</span>
+                      <span className="text-xs text-gray-500 uppercase">{coin.symbol}</span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-end">
+                    <span className="font-bold text-white tracking-wide">{formatCurrency(coin.current_price)}</span>
+                    <div className={`flex items-center gap-1 text-xs font-bold mt-1 ${
+                      coin.price_change_percentage_24h >= 0 ? 'text-green-500' : 'text-red-500'
+                    }`}>
+                      {coin.price_change_percentage_24h >= 0 ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
+                      <span dir="ltr">{formatPercentage(coin.price_change_percentage_24h)}</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-800/40">
+                  <div>
+                    <span className="block text-xs text-gray-500 mb-1">تغير (1 س)</span>
+                    <div className={`flex items-center gap-1 text-sm font-medium ${
+                      (coin.price_change_percentage_1h_in_currency || 0) >= 0 ? 'text-green-500' : 'text-red-500'
+                    }`}>
+                      <span dir="ltr">{formatPercentage(coin.price_change_percentage_1h_in_currency)}</span>
+                    </div>
+                  </div>
+                  <div className="text-left">
+                    <span className="block text-xs text-gray-500 mb-1">القيمة السوقية</span>
+                    <span className="text-sm font-medium text-gray-300 tracking-wide">{formatCurrency(coin.market_cap)}</span>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
         </div>
         
         {/* Latest News Section */}

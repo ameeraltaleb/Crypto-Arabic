@@ -183,7 +183,7 @@ export default function Home() {
                   <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/40 to-transparent opacity-90 group-hover:opacity-70 transition-opacity"></div>
                 </div>
                 
-                <div className="relative z-10 p-8 lg:p-12 w-full lg:w-4/5">
+                <div className="relative z-10 p-5 lg:p-12 w-full lg:w-4/5">
                   <div className="flex flex-wrap items-center gap-3 mb-4">
                     <span className="bg-green-500 text-white text-xs px-4 py-1.5 rounded-full font-bold uppercase tracking-wider shadow-lg shadow-green-500/30">
                       {articles[0].category || 'أخبار'}
@@ -193,7 +193,7 @@ export default function Home() {
                       {format(new Date(articles[0].published_at), 'dd MMMM yyyy', { locale: ar })}
                     </span>
                   </div>
-                  <h2 className="text-3xl lg:text-4xl xl:text-5xl font-extrabold text-white leading-[1.3] mb-4 group-hover:text-green-400 transition-colors drop-shadow-lg">
+                  <h2 className="text-2xl md:text-3xl lg:text-5xl font-extrabold text-white leading-[1.3] mb-4 group-hover:text-green-400 transition-colors drop-shadow-lg">
                     {articles[0].title}
                   </h2>
                   <p className="text-gray-200 text-lg line-clamp-2 mb-6 drop-shadow-md font-medium">
@@ -249,8 +249,9 @@ export default function Home() {
           {/* Main Content Area */}
           <div className="lg:col-span-8">
             {/* Categories Filter */}
-            <section className="mb-10">
-              <div className="flex items-center gap-3 overflow-x-auto pb-4 scrollbar-hide">
+            <section className="mb-10 relative">
+              <div className="absolute top-0 left-0 bottom-4 w-12 bg-gradient-to-r from-gray-950 to-transparent pointer-events-none z-10 md:hidden"></div>
+              <div className="flex items-center gap-3 overflow-x-auto pb-4 scrollbar-hide relative">
                 <div className="bg-gray-900/80 backdrop-blur-md border border-gray-800 p-2.5 rounded-2xl shrink-0 ml-2 shadow-lg">
                   <Filter className="w-5 h-5 text-green-500" />
                 </div>
