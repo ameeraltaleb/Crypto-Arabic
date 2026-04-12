@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { format } from 'date-fns';
 import { ar } from 'date-fns/locale';
-import { TrendingUp, TrendingDown, RefreshCw, DollarSign, Activity, BarChart3 } from 'lucide-react';
+import { TrendingUp, TrendingDown, RefreshCw, DollarSign, Activity, BarChart3, Clock, BookOpen, ChevronLeft } from 'lucide-react';
+import { collection, query, where, orderBy, limit, getDocs } from 'firebase/firestore';
+import { db } from '../lib/firebase';
 
 interface CoinData {
   id: string;
@@ -18,11 +21,23 @@ interface CoinData {
   price_change_percentage_7d_in_currency?: number;
 }
 
+interface Article {
+  id: string;
+  title: string;
+  slug: string;
+  summary: string;
+  image_url: string;
+  category: string;
+  published_at: string;
+}
+
 export default function Market() {
   const [coins, setCoins] = useState<CoinData[]>([]);
   const [loading, setLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [loadingArticles, setLoadingArticles] = useState(true);
 
   const fetchMarketData = async () => {
     setIsRefreshing(true);
@@ -48,6 +63,28 @@ export default function Market() {
 
     // Auto update every 15 minutes (15 * 60 * 1000 ms)
     const interval = setInterval(fetchMarketData, 15 * 60 * 1000);
+    
+    // Fetch latest articles
+    const fetchArticles = async () => {
+      try {
+        const q = query(
+          collection(db, 'articles'),
+          where('status', '==', 'published'),
+          orderBy('published_at', 'desc'),
+          limit(3)
+        );
+        const snapshot = await getDocs(q);
+        const articlesData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Article));
+        setArticles(articlesData);
+      } catch (error) {
+        console.error('Error fetching articles:', error);
+      } finally {
+        setLoadingArticles(false);
+      }
+    };
+    
+    fetchArticles();
+
     return () => clearInterval(interval);
   }, []);
 
@@ -194,6 +231,63 @@ export default function Market() {
           </div>
         </div>
         
+        {/* Latest News Section */}
+        <div className="mt-16">
+          <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-3">
+            <span className="w-2 h-8 bg-green-500 rounded-full shadow-lg shadow-green-500/50"></span>
+            أخبار تهمك
+          </h2>
+          
+          {loadingArticles ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {[1, 2, 3].map(i => (
+                <div key={i} className="animate-pulse bg-gray-900/50 rounded-2xl h-[300px] border border-gray-800/60"></div>
+              ))}
+            </div>
+          ) : articles.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {articles.map((article) => (
+                <Link 
+                  key={article.id} 
+                  to={`/article/${article.slug}`}
+                  className="group bg-gray-900/40 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-800/60 hover:border-green-500/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-green-500/10 flex flex-col"
+                >
+                  <div className="relative aspect-video overflow-hidden bg-gray-800">
+                    {article.image_url ? (
+                      <img 
+                        src={article.image_url} 
+                        alt={article.title}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        referrerPolicy="no-referrer"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-gray-600">
+                        <BookOpen className="w-8 h-8 opacity-20" />
+                      </div>
+                    )}
+                    <div className="absolute top-3 right-3 bg-gray-950/80 backdrop-blur-md text-white text-[10px] px-2 py-1 rounded-full flex items-center gap-1 border border-gray-700/50">
+                      <Clock className="w-3 h-3 text-green-400" />
+                      {format(new Date(article.published_at), 'dd MMM', { locale: ar })}
+                    </div>
+                  </div>
+                  <div className="p-5 flex flex-col flex-grow">
+                    <div className="text-green-500 text-xs font-bold mb-2">
+                      {article.category || 'أخبار'}
+                    </div>
+                    <h3 className="text-base font-bold text-gray-100 mb-3 line-clamp-2 group-hover:text-green-400 transition-colors leading-snug">
+                      {article.title}
+                    </h3>
+                    <div className="flex items-center text-green-500 text-xs font-bold mt-auto group-hover:gap-1.5 transition-all">
+                      اقرأ المزيد
+                      <ChevronLeft className="w-3.5 h-3.5 mr-1" />
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : null}
+        </div>
+
       </div>
     </div>
   );
