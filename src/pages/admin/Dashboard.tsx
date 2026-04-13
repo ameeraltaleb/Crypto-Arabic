@@ -28,6 +28,7 @@ export default function AdminDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSavingSettings, setIsSavingSettings] = useState(false);
   const [settingsMessage, setSettingsMessage] = useState({ type: '', text: '' });
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
   const { user, logout, loading: authLoading } = useAuth();
   const navigate = useNavigate();
 
@@ -63,11 +64,10 @@ export default function AdminDashboard() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!window.confirm('هل أنت متأكد من حذف هذا المقال؟')) return;
-    
     try {
       await deleteDoc(doc(db, 'articles', id));
       setArticles(articles.filter(a => a.id !== (id as any)));
+      setDeleteConfirmId(null);
     } catch (error) {
       console.error('Failed to delete article:', error);
     }
@@ -202,13 +202,30 @@ export default function AdminDashboard() {
                         >
                           <Eye className="w-5 h-5" />
                         </Link>
-                        <button
-                          onClick={() => handleDelete(article.id)}
-                          className="text-gray-400 hover:text-red-500 transition-colors"
-                          title="حذف"
-                        >
-                          <Trash2 className="w-5 h-5" />
-                        </button>
+                        {deleteConfirmId === article.id.toString() ? (
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => handleDelete(article.id.toString())}
+                              className="text-xs bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded transition-colors"
+                            >
+                              تأكيد
+                            </button>
+                            <button
+                              onClick={() => setDeleteConfirmId(null)}
+                              className="text-xs bg-gray-700 hover:bg-gray-600 text-white px-2 py-1 rounded transition-colors"
+                            >
+                              إلغاء
+                            </button>
+                          </div>
+                        ) : (
+                          <button
+                            onClick={() => setDeleteConfirmId(article.id.toString())}
+                            className="text-gray-400 hover:text-red-500 transition-colors"
+                            title="حذف"
+                          >
+                            <Trash2 className="w-5 h-5" />
+                          </button>
+                        )}
                       </div>
                     </td>
                   </tr>

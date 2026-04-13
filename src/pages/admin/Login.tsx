@@ -1,17 +1,27 @@
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Lock } from 'lucide-react';
 import { useAuth } from '../../lib/AuthContext';
 
 export default function AdminLogin() {
-  const { login } = useAuth();
+  const { user, login } = useAuth();
   const navigate = useNavigate();
+  const [errorMsg, setErrorMsg] = useState('');
+
+  useEffect(() => {
+    if (user) {
+      navigate('/admin/dashboard');
+    }
+  }, [user, navigate]);
 
   const handleGoogleLogin = async () => {
     try {
+      setErrorMsg('');
       await login();
-      navigate('/admin/dashboard');
-    } catch (err) {
+      // Navigation will be handled by the useEffect once user state updates
+    } catch (err: any) {
       console.error('Login failed:', err);
+      setErrorMsg('فشل تسجيل الدخول: ' + (err.message || 'يرجى المحاولة مرة أخرى'));
     }
   };
 
@@ -26,6 +36,12 @@ export default function AdminLogin() {
         
         <h2 className="text-2xl font-bold text-white mb-4">تسجيل الدخول للإدارة</h2>
         <p className="text-gray-400 mb-8">يرجى تسجيل الدخول باستخدام حساب جوجل المعتمد للوصول إلى لوحة التحكم.</p>
+        
+        {errorMsg && (
+          <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg text-red-500 text-sm">
+            {errorMsg}
+          </div>
+        )}
         
         <button
           onClick={handleGoogleLogin}
