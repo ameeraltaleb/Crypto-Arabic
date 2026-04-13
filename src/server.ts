@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import compression from 'compression';
 import { createServer as createViteServer } from 'vite';
 import path from 'path';
+import fs from 'fs';
 import cron from 'node-cron';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
@@ -343,7 +344,20 @@ async function startServer() {
     }
   });
 
-  // Schedule AI Article Generation (runs every hour)
+  // API Endpoint for external cron jobs (e.g., cron-job.org)
+  // This solves the "Server Sleep" issue on serverless platforms
+  app.get('/api/cron/generate', async (req, res) => {
+    console.log('External cron job triggered AI Article Generation...');
+    try {
+      await fetchAndGenerateArticle();
+      res.status(200).json({ success: true, message: 'Article generation triggered successfully' });
+    } catch (error) {
+      console.error('External cron generation failed:', error);
+      res.status(500).json({ success: false, error: 'Failed to generate article' });
+    }
+  });
+
+  // Schedule AI Article Generation (runs every hour internally)
   cron.schedule('0 * * * *', async () => {
     console.log('Running scheduled AI Article Generation...');
     try {
@@ -363,20 +377,79 @@ async function startServer() {
     }
   }, 5000);
 
+  // Dynamic robots.txt
+  app.get('/robots.txt', (req, res) => {
+    const baseUrl = process.env.APP_URL || `${req.protocol}://${req.get('host')}`;
+    res.type('text/plain');
+    res.send(`User-agent: *\nAllow: /\nDisallow: /admin/\n\nSitemap: ${baseUrl}/sitemap.xml`);
+  });
+
   // Vite middleware for development
+  let vite: any;
   if (process.env.NODE_ENV !== 'production') {
-    const vite = await createViteServer({
+    vite = await createViteServer({
       server: { middlewareMode: true },
       appType: 'spa',
     });
     app.use(vite.middlewares);
   } else {
     const distPath = path.join(process.cwd(), 'dist');
-    app.use(express.static(distPath, { maxAge: '1y', etag: true }));
-    app.get('*', (req, res) => {
-      res.sendFile(path.join(distPath, 'index.html'));
-    });
+    app.use(express.static(distPath, { index: false, maxAge: '1y', etag: true }));
   }
+
+  // Catch-all route to serve index.html with Open Graph injection
+  app.get('*', async (req, res) => {
+    try {
+      const url = req.originalUrl;
+      let template = '';
+      
+      if (process.env.NODE_ENV !== 'production') {
+        template = fs.readFileSync(path.resolve(process.cwd(), 'index.html'), 'utf-8');
+        template = await vite.transformIndexHtml(url, template);
+      } else {
+        template = fs.readFileSync(path.resolve(process.cwd(), 'dist/index.html'), 'utf-8');
+      }
+
+      // Check if it's an article page
+      const articleMatch = url.match(/^\/article\/([^\/]+)/);
+      if (articleMatch) {
+        const slug = articleMatch[1];
+        const q = query(collection(firestore, 'articles'), where('slug', '==', slug), limit(1));
+        const snapshot = await getDocs(q);
+        
+        if (!snapshot.empty) {
+          const article = snapshot.docs[0].data();
+          const baseUrl = process.env.APP_URL || `${req.protocol}://${req.get('host')}`;
+          const articleUrl = `${baseUrl}/article/${slug}`;
+          const imageUrl = article.image_url || `${baseUrl}/default-image.jpg`;
+
+          const metaTags = `
+    <title>${article.title} | كريبتو بالعربي</title>
+    <meta name="description" content="${article.summary}" />
+    <meta property="og:title" content="${article.title}" />
+    <meta property="og:description" content="${article.summary}" />
+    <meta property="og:image" content="${imageUrl}" />
+    <meta property="og:url" content="${articleUrl}" />
+    <meta property="og:type" content="article" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="${article.title}" />
+    <meta name="twitter:description" content="${article.summary}" />
+    <meta name="twitter:image" content="${imageUrl}" />
+          `;
+
+          // Replace default title and description
+          template = template.replace(/<title>.*?<\/title>/, '');
+          template = template.replace(/<meta name="description".*?\/>/, '');
+          template = template.replace('</head>', `${metaTags}\n</head>`);
+        }
+      }
+
+      res.status(200).set({ 'Content-Type': 'text/html' }).end(template);
+    } catch (e) {
+      console.error('Error serving HTML:', e);
+      res.status(500).end(e instanceof Error ? e.message : String(e));
+    }
+  });
 
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on http://localhost:${PORT}`);
