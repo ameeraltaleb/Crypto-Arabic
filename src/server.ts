@@ -27,6 +27,9 @@ async function startServer() {
   const app = express();
   const PORT = 3000;
 
+  // Trust proxy to ensure req.protocol is https and req.get('host') is correct behind Cloud Run proxy
+  app.set('trust proxy', 1);
+
   // Middleware
   app.use(compression());
   app.use(cors());
