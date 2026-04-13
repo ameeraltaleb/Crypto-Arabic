@@ -4,7 +4,7 @@
  */
 
 import { Suspense, lazy } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
 import { AuthProvider } from './lib/AuthContext';
 
@@ -42,6 +42,7 @@ export default function App() {
             <Route path="contact" element={<Contact />} />
             
             {/* Admin Routes */}
+            <Route path="admin" element={<Navigate to="/admin/dashboard" replace />} />
             <Route path="admin/login" element={<AdminLogin />} />
             <Route path="admin/dashboard" element={<AdminDashboard />} />
             <Route path="admin/articles/new" element={<CreateArticle />} />
