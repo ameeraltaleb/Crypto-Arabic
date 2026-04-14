@@ -6,6 +6,7 @@ export default function Terms() {
       <Helmet>
         <title>شروط الاستخدام | كريبتو بالعربي</title>
         <meta name="description" content="شروط وأحكام استخدام منصة كريبتو بالعربي وإخلاء المسؤولية المالية." />
+        <link rel="canonical" href="https://crypto-arabic.vercel.app/terms" />
       </Helmet>
       <div className="max-w-3xl mx-auto bg-gray-900 rounded-2xl p-8 shadow-sm border border-gray-800">
         <h1 className="text-3xl font-bold text-gray-100 mb-6">شروط الاستخدام</h1>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { Lock } from 'lucide-react';
 import { useAuth } from '../../lib/AuthContext';
 
@@ -27,6 +28,9 @@ export default function AdminLogin() {
 
   return (
     <div className="min-h-[70vh] flex items-center justify-center px-4">
+      <Helmet>
+        <meta name="robots" content="noindex" />
+      </Helmet>
       <div className="max-w-md w-full bg-gray-900 border border-gray-800 rounded-2xl p-8 shadow-2xl text-center">
         <div className="flex justify-center mb-8">
           <div className="bg-green-500/10 p-4 rounded-full">

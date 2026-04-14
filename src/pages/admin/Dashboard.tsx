@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { Edit, Trash2, Eye, LogOut, CheckCircle, Clock, Settings, FileText, Save } from 'lucide-react';
 import { collection, getDocs, deleteDoc, doc, setDoc, query, orderBy } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
@@ -103,6 +104,9 @@ export default function AdminDashboard() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <Helmet>
+        <meta name="robots" content="noindex" />
+      </Helmet>
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-white">لوحة التحكم</h1>
         <div className="flex items-center gap-4">

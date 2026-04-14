@@ -145,11 +145,26 @@ export default function Home() {
 
   const isDefaultView = currentPage === 1 && !currentSearch && currentCategory === 'الكل';
 
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "url": "https://crypto-arabic.vercel.app/",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://crypto-arabic.vercel.app/?search={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  };
+
   return (
     <div className="relative min-h-screen bg-gray-950">
       <Helmet>
         <title>كريبتو بالعربي - أخبار وتحليلات العملات الرقمية</title>
-        <meta name="description" content="منصة متخصصة في أخبار وتحليلات العملات الرقمية والتداول، مدعومة بالذكاء الاصطناعي." />
+        <meta name="description" content="منصة متخصصة في أخبار وتحليلات العملات الرقمية والتداول، مدعومة بالذكاء الاصطناعي لتقديم أحدث المعلومات لحظة بلحظة." />
+        <link rel="canonical" href="https://crypto-arabic.vercel.app/" />
+        <script type="application/ld+json">
+          {JSON.stringify(websiteSchema)}
+        </script>
       </Helmet>
 
       {/* Web3 Background Aesthetics */}

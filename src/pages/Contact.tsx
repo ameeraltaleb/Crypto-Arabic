@@ -38,6 +38,7 @@ export default function Contact() {
       <Helmet>
         <title>اتصل بنا | كريبتو بالعربي</title>
         <meta name="description" content="تواصل مع فريق كريبتو بالعربي لأي استفسارات أو اقتراحات." />
+        <link rel="canonical" href="https://crypto-arabic.vercel.app/contact" />
       </Helmet>
       <div className="max-w-2xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-100 mb-8 text-center">اتصل بنا</h1>

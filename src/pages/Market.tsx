@@ -105,6 +105,7 @@ export default function Market() {
       <Helmet>
         <title>أسعار العملات الرقمية | كريبتو بالعربي</title>
         <meta name="description" content="تابع أسعار العملات الرقمية لحظة بلحظة، القيمة السوقية، وحجم التداول لأهم العملات المشفرة." />
+        <link rel="canonical" href="https://crypto-arabic.vercel.app/market" />
       </Helmet>
 
       {/* Background Aesthetics */}

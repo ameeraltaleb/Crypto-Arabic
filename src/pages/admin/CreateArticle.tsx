@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { Save, ArrowRight } from 'lucide-react';
 import slugify from 'slugify';
 import { collection, addDoc } from 'firebase/firestore';
@@ -51,6 +52,9 @@ export default function CreateArticle() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <Helmet>
+        <meta name="robots" content="noindex" />
+      </Helmet>
       <div className="flex items-center gap-4 mb-8">
         <button
           onClick={() => navigate('/admin/dashboard')}

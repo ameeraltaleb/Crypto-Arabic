@@ -6,6 +6,7 @@ export default function Privacy() {
       <Helmet>
         <title>سياسة الخصوصية | كريبتو بالعربي</title>
         <meta name="description" content="سياسة الخصوصية لمنصة كريبتو بالعربي. تعرف على كيفية جمع واستخدام بياناتك." />
+        <link rel="canonical" href="https://crypto-arabic.vercel.app/privacy" />
       </Helmet>
       <div className="max-w-3xl mx-auto bg-gray-900 rounded-2xl p-8 shadow-sm border border-gray-800">
         <h1 className="text-3xl font-bold text-gray-100 mb-6">سياسة الخصوصية</h1>

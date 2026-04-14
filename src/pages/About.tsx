@@ -6,6 +6,7 @@ export default function About() {
       <Helmet>
         <title>من نحن | كريبتو بالعربي</title>
         <meta name="description" content="تعرف على منصة كريبتو بالعربي، المنصة الرائدة في أخبار وتحليلات العملات الرقمية في العالم العربي." />
+        <link rel="canonical" href="https://crypto-arabic.vercel.app/about" />
       </Helmet>
       <div className="max-w-3xl mx-auto bg-gray-900 rounded-2xl p-8 shadow-sm border border-gray-800">
         <h1 className="text-3xl font-bold text-gray-100 mb-6">من نحن</h1>
