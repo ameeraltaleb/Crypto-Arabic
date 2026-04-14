@@ -150,23 +150,27 @@ export default function ArticleDetails() {
     "@context": "https://schema.org",
     "@type": "NewsArticle",
     "headline": article.title,
-    "image": [article.image_url || "https://crypto-blog.com/default-image.jpg"],
+    "image": [article.image_url || "https://crypto-arabic.vercel.app/logo.png"],
     "datePublished": new Date(article.published_at).toISOString(),
     "dateModified": new Date(article.published_at).toISOString(),
-    "author": [{
+    "author": {
       "@type": "Organization",
       "name": "كريبتو بالعربي",
-      "url": "https://crypto-blog.com"
-    }],
+      "url": "https://crypto-arabic.vercel.app"
+    },
     "publisher": {
       "@type": "Organization",
       "name": "كريبتو بالعربي",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://crypto-blog.com/logo.png"
+        "url": "https://crypto-arabic.vercel.app/logo.png"
       }
     },
-    "description": article.summary
+    "description": article.summary,
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": shareUrl
+    }
   };
 
   return (
@@ -176,18 +180,23 @@ export default function ArticleDetails() {
       </div>
       <article className="max-w-4xl mx-auto px-4 py-8">
         <Helmet>
-        <title>{article.title} | كريبتو بالعربي</title>
-        <meta name="description" content={article.summary} />
-        <meta name="keywords" content={article.keywords} />
-        <meta property="og:title" content={article.title} />
-        <meta property="og:description" content={article.summary} />
-        {article.image_url && <meta property="og:image" content={article.image_url} />}
-        <meta property="og:type" content="article" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <script type="application/ld+json">
-          {JSON.stringify(jsonLd)}
-        </script>
-      </Helmet>
+          <title>{article.title} | كريبتو بالعربي</title>
+          <meta name="description" content={article.summary} />
+          <meta name="keywords" content={article.keywords} />
+          <link rel="canonical" href={shareUrl} />
+          <meta property="og:title" content={article.title} />
+          <meta property="og:description" content={article.summary} />
+          <meta property="og:url" content={shareUrl} />
+          {article.image_url && <meta property="og:image" content={article.image_url} />}
+          <meta property="og:type" content="article" />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content={article.title} />
+          <meta name="twitter:description" content={article.summary} />
+          {article.image_url && <meta name="twitter:image" content={article.image_url} />}
+          <script type="application/ld+json">
+            {JSON.stringify(jsonLd)}
+          </script>
+        </Helmet>
 
       <Link to="/" className="inline-flex items-center gap-2 text-gray-400 hover:text-green-500 mb-8 transition-colors">
         <ArrowRight className="w-5 h-5" />
