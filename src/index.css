@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @keyframes marquee {
   0% { transform: translateX(0); }
   100% { transform: translateX(-33.3333%); }
