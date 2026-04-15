@@ -5,6 +5,7 @@ import { format } from 'date-fns';
 import { ar } from 'date-fns/locale';
 import { TrendingUp, Clock, ChevronLeft, Search, Filter, Flame, BookOpen, Sparkles } from 'lucide-react';
 import FearAndGreedIndex from '../components/FearAndGreedIndex';
+import TechnicalAnalysisWidget from '../components/TechnicalAnalysisWidget';
 import { collection, query, where, orderBy, limit, getDocs, startAfter, count } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 
@@ -179,10 +180,10 @@ export default function Home() {
         {!loading && isDefaultView && articles.length > 0 && (
           <section className="mb-16">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-              {/* Main Featured Article */}
+              {/* Main Featured Article (Bento Large) */}
               <Link 
                 to={`/article/${articles[0].slug}`} 
-                className="lg:col-span-8 group relative rounded-[2.5rem] overflow-hidden border border-gray-800/60 hover:border-yellow-500/50 transition-all duration-500 shadow-2xl min-h-[400px] lg:min-h-[500px] flex flex-col justify-end"
+                className="lg:col-span-8 group relative rounded-[2.5rem] overflow-hidden border border-gray-800/60 hover:border-yellow-500/50 transition-all duration-500 shadow-2xl min-h-[500px] flex flex-col justify-end"
               >
                 <div className="absolute inset-0">
                   {articles[0].image_url ? (
@@ -200,7 +201,7 @@ export default function Home() {
                   <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/40 to-transparent opacity-90 group-hover:opacity-70 transition-opacity"></div>
                 </div>
                 
-                <div className="relative z-10 p-5 lg:p-12 w-full lg:w-4/5">
+                <div className="relative z-10 p-8 lg:p-12 w-full lg:w-4/5">
                   <div className="flex flex-wrap items-center gap-3 mb-4">
                     <span className="bg-yellow-500 text-gray-950 text-xs px-4 py-1.5 rounded-full font-bold uppercase tracking-wider shadow-lg shadow-yellow-500/30">
                       {articles[0].category || 'أخبار'}
@@ -210,7 +211,7 @@ export default function Home() {
                       {format(new Date(articles[0].published_at), 'dd MMMM yyyy', { locale: ar })}
                     </span>
                   </div>
-                  <h2 className="text-2xl md:text-3xl lg:text-5xl font-extrabold text-white leading-[1.3] mb-4 group-hover:text-yellow-400 transition-colors drop-shadow-lg">
+                  <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white leading-[1.2] mb-4 group-hover:text-yellow-400 transition-colors drop-shadow-lg">
                     {articles[0].title}
                   </h2>
                   <p className="text-gray-200 text-lg line-clamp-2 mb-6 drop-shadow-md font-medium">
@@ -219,45 +220,27 @@ export default function Home() {
                 </div>
               </Link>
 
-              {/* Secondary Featured Articles */}
-              {articles.length > 1 && (
-                <div className="lg:col-span-4 flex flex-col gap-6">
-                  {articles.slice(1, 3).map((article) => (
-                    <Link 
-                      key={article.id}
-                      to={`/article/${article.slug}`} 
-                      className="group relative rounded-[2rem] overflow-hidden border border-gray-800/60 hover:border-yellow-500/50 transition-all duration-500 shadow-xl flex-1 min-h-[200px] lg:min-h-[240px] flex flex-col justify-end"
-                    >
-                      <div className="absolute inset-0">
-                        {article.image_url ? (
-                          <img 
-                            src={article.image_url} 
-                            alt={article.title}
-                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                            referrerPolicy="no-referrer"
-                          />
-                        ) : (
-                          <div className="w-full h-full bg-gray-800 flex items-center justify-center">
-                            <TrendingUp className="w-10 h-10 text-gray-700" />
-                          </div>
-                        )}
-                        <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/60 to-transparent opacity-90 group-hover:opacity-70 transition-opacity"></div>
-                      </div>
-                      
-                      <div className="relative z-10 p-6">
-                        <div className="flex flex-wrap items-center gap-2 mb-3">
-                          <span className="bg-yellow-500/90 backdrop-blur-sm text-gray-950 text-xs px-3 py-1 rounded-full font-bold shadow-lg">
-                            {article.category || 'أخبار'}
-                          </span>
-                        </div>
-                        <h3 className="text-xl font-bold text-white leading-snug group-hover:text-yellow-400 transition-colors line-clamp-3 drop-shadow-lg">
-                          {article.title}
-                        </h3>
-                      </div>
-                    </Link>
-                  ))}
+              {/* Bento Side Column */}
+              <div className="lg:col-span-4 flex flex-col gap-6">
+                {/* Fear & Greed Index Box */}
+                <div className="flex-1">
+                  <FearAndGreedIndex />
                 </div>
-              )}
+                
+                {/* BTC Analysis Box */}
+                <div className="bg-gray-900/40 backdrop-blur-sm rounded-[2rem] border border-gray-800/60 shadow-xl overflow-hidden flex flex-col h-[300px]">
+                  <div className="p-5 border-b border-gray-800/60 flex items-center justify-between">
+                    <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                      <TrendingUp className="w-4 h-4 text-yellow-500" />
+                      تحليل BTC المباشر
+                    </h3>
+                    <span className="text-[10px] text-gray-500 font-mono">1D Interval</span>
+                  </div>
+                  <div className="flex-grow overflow-hidden">
+                    <TechnicalAnalysisWidget height="100%" symbol="BINANCE:BTCUSDT" />
+                  </div>
+                </div>
+              </div>
             </div>
           </section>
         )}
@@ -269,27 +252,31 @@ export default function Home() {
             className="relative overflow-hidden group block"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-yellow-600/10 to-yellow-700/10 group-hover:from-yellow-600/20 group-hover:to-yellow-700/20 transition-all duration-500"></div>
-            <div className="relative bg-gray-900/40 backdrop-blur-md border border-yellow-500/20 rounded-[2.5rem] p-6 md:p-10 flex flex-col md:flex-row items-center justify-between gap-8 overflow-hidden">
-              <div className="absolute -top-24 -right-24 w-64 h-64 bg-yellow-500/10 rounded-full blur-3xl group-hover:bg-yellow-500/20 transition-all duration-500"></div>
+            <div className="relative bg-gray-900/60 backdrop-blur-xl border border-yellow-500/30 rounded-[3rem] p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-10 overflow-hidden shadow-[0_0_50px_-12px_rgba(243,186,47,0.2)]">
+              <div className="absolute -top-24 -right-24 w-80 h-80 bg-yellow-500/20 rounded-full blur-[100px] group-hover:bg-yellow-500/30 transition-all duration-700"></div>
+              <div className="absolute -bottom-24 -left-24 w-80 h-80 bg-yellow-600/10 rounded-full blur-[100px] group-hover:bg-yellow-600/20 transition-all duration-700"></div>
               
-              <div className="flex flex-col md:flex-row items-center gap-8 text-center md:text-right">
-                <div className="bg-gradient-to-br from-yellow-400 to-yellow-600 p-5 rounded-3xl shadow-xl shadow-yellow-500/20 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
-                  <Sparkles className="w-10 h-10 text-gray-950" />
+              <div className="flex flex-col md:flex-row items-center gap-10 text-center md:text-right relative z-10">
+                <div className="relative">
+                  <div className="absolute inset-0 bg-yellow-400 blur-2xl opacity-20 group-hover:opacity-40 transition-opacity"></div>
+                  <div className="relative bg-gradient-to-br from-yellow-400 to-yellow-600 p-6 rounded-[2rem] shadow-2xl shadow-yellow-500/40 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                    <Sparkles className="w-12 h-12 text-gray-950" />
+                  </div>
                 </div>
                 <div>
-                  <div className="flex items-center justify-center md:justify-start gap-2 mb-2">
-                    <span className="bg-yellow-500/20 text-yellow-400 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider border border-yellow-500/30">جديد</span>
-                    <div className="w-1 h-1 bg-gray-600 rounded-full"></div>
-                    <span className="text-gray-400 text-xs font-medium">مدعوم بالذكاء الاصطناعي</span>
+                  <div className="flex items-center justify-center md:justify-start gap-3 mb-4">
+                    <span className="bg-yellow-500 text-gray-950 text-[10px] px-3 py-1 rounded-full font-black uppercase tracking-widest shadow-lg shadow-yellow-500/20">جديد</span>
+                    <div className="w-1.5 h-1.5 bg-yellow-500/50 rounded-full"></div>
+                    <span className="text-yellow-500/80 text-xs font-bold tracking-wide">مدعوم بالذكاء الاصطناعي</span>
                   </div>
-                  <h2 className="text-3xl md:text-4xl font-black text-white mb-3">ملخص السوق اليومي</h2>
-                  <p className="text-gray-400 text-base md:text-lg max-w-xl leading-relaxed">
+                  <h2 className="text-4xl md:text-5xl font-black text-white mb-4 tracking-tight">ملخص السوق اليومي</h2>
+                  <p className="text-gray-300 text-lg md:text-xl max-w-xl leading-relaxed font-medium">
                     وفر وقتك واعرف أهم ما حدث في عالم الكريبتو خلال الـ 24 ساعة الماضية بضغطة واحدة.
                   </p>
                 </div>
               </div>
               
-              <div className="flex items-center gap-3 bg-yellow-500 text-gray-950 px-8 py-4 rounded-2xl font-bold shadow-xl shadow-yellow-500/30 group-hover:translate-x-[-8px] transition-all whitespace-nowrap">
+              <div className="relative z-10 flex items-center gap-4 bg-white text-gray-950 px-10 py-5 rounded-[1.5rem] font-black shadow-2xl group-hover:bg-yellow-400 transition-all duration-300 whitespace-nowrap transform group-hover:-translate-x-2">
                 اقرأ الملخص الآن
                 <ChevronLeft className="w-6 h-6" />
               </div>
@@ -339,18 +326,18 @@ export default function Home() {
                     <div key={i} className="animate-pulse bg-gray-900/50 rounded-3xl h-[400px] border border-gray-800/60"></div>
                   ))}
                 </div>
-              ) : (isDefaultView ? articles.slice(3) : articles).length === 0 ? (
+              ) : (isDefaultView ? articles.slice(1) : articles).length === 0 ? (
                 <div className="text-center py-20 bg-gray-900/50 rounded-3xl border border-gray-800/60">
                   <p className="text-gray-400 text-lg">لم يتم العثور على مقالات تطابق بحثك.</p>
                 </div>
               ) : (
                 <>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-                    {(isDefaultView ? articles.slice(3) : articles).map((article) => (
+                    {(isDefaultView ? articles.slice(1) : articles).map((article) => (
                       <Link 
                         key={article.id} 
                         to={`/article/${article.slug}`}
-                        className="group bg-gray-900/40 backdrop-blur-sm rounded-3xl overflow-hidden border border-gray-800/60 hover:border-green-500/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-green-500/10 flex flex-col"
+                        className="group bg-gray-900/40 backdrop-blur-sm rounded-3xl overflow-hidden border border-gray-800/60 hover:border-yellow-500/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-yellow-500/10 flex flex-col"
                       >
                         <div className="relative aspect-[16/10] overflow-hidden bg-gray-800">
                           {article.image_url ? (

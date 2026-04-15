@@ -64,12 +64,12 @@ export default function FearAndGreedIndex() {
     bgClass = 'bg-yellow-500/10';
     Icon = AlertTriangle;
   } else if (value <= 75) {
-    colorClass = 'text-green-400';
-    bgClass = 'bg-green-400/10';
+    colorClass = 'text-yellow-400';
+    bgClass = 'bg-yellow-400/10';
     Icon = TrendingUp;
   } else {
-    colorClass = 'text-green-500';
-    bgClass = 'bg-green-500/10';
+    colorClass = 'text-yellow-500';
+    bgClass = 'bg-yellow-500/10';
     Icon = TrendingUp;
   }
 
@@ -77,35 +77,35 @@ export default function FearAndGreedIndex() {
   const rotation = (value / 100) * 180 - 90;
 
   return (
-    <div className="bg-gray-900/40 backdrop-blur-sm rounded-3xl p-6 lg:p-8 border border-gray-800/60 shadow-xl">
+    <div className="bg-gray-900/40 backdrop-blur-sm rounded-[2rem] p-6 lg:p-8 border border-gray-800/60 shadow-xl h-full flex flex-col">
       <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-3">
-        <div className="bg-blue-500/10 p-2 rounded-lg">
+        <div className="bg-yellow-500/10 p-2 rounded-xl">
           <Icon className={`w-5 h-5 ${colorClass}`} />
         </div>
         مؤشر الخوف والطمع
       </h3>
       
-      <div className="relative flex flex-col items-center justify-center py-4">
+      <div className="relative flex flex-col items-center justify-center py-4 flex-grow">
         {/* Gauge Background */}
         <div className="relative w-48 h-24 overflow-hidden">
           <div className="absolute top-0 left-0 w-48 h-48 rounded-full border-[16px] border-gray-800 border-b-transparent border-r-transparent rotate-45"></div>
           {/* Gradient overlay for gauge */}
-          <div className="absolute top-0 left-0 w-48 h-48 rounded-full border-[16px] border-transparent border-t-red-500 border-l-orange-500 border-b-green-500 border-r-green-400 rotate-45 opacity-20 mix-blend-screen"></div>
+          <div className="absolute top-0 left-0 w-48 h-48 rounded-full border-[16px] border-transparent border-t-red-500 border-l-yellow-500 border-b-yellow-500 border-r-yellow-400 rotate-45 opacity-20 mix-blend-screen"></div>
           
           {/* Needle */}
           <div 
-            className="absolute bottom-0 left-1/2 w-1 h-20 bg-white origin-bottom rounded-t-full transition-transform duration-1000 ease-out"
+            className="absolute bottom-0 left-1/2 w-1 h-20 bg-yellow-500 origin-bottom rounded-t-full transition-transform duration-1000 ease-out"
             style={{ transform: `translateX(-50%) rotate(${rotation}deg)` }}
           >
-            <div className="absolute -bottom-2 -left-1.5 w-4 h-4 bg-white rounded-full shadow-lg"></div>
+            <div className="absolute -bottom-2 -left-1.5 w-4 h-4 bg-yellow-500 rounded-full shadow-lg shadow-yellow-500/40"></div>
           </div>
         </div>
 
         <div className="mt-6 text-center">
-          <div className={`text-4xl font-black ${colorClass} mb-1`}>
+          <div className={`text-5xl font-black ${colorClass} mb-1 tracking-tighter`}>
             {value}
           </div>
-          <div className="text-gray-300 font-bold text-lg mb-6">
+          <div className="text-gray-300 font-bold text-xl mb-2">
             {data.value_classification === 'Extreme Fear' && 'خوف شديد'}
             {data.value_classification === 'Fear' && 'خوف'}
             {data.value_classification === 'Neutral' && 'محايد'}
@@ -116,11 +116,11 @@ export default function FearAndGreedIndex() {
       </div>
 
       {/* Explanation Section */}
-      <div className="mt-2 pt-5 border-t border-gray-800/60">
+      <div className="mt-auto pt-5 border-t border-gray-800/60">
         <div className="flex items-start gap-2.5 text-gray-400">
-          <Info className="w-4 h-4 mt-0.5 shrink-0 text-blue-400" />
-          <p className="text-xs leading-relaxed">
-            يتم تحديث هذا المؤشر يومياً بناءً على بيانات من <a href="https://alternative.me/crypto/fear-and-greed-index/" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 transition-colors">Alternative.me</a>. يعتمد في حساباته على تقلبات السوق، حجم التداول، زخم وسائل التواصل الاجتماعي، وهيمنة البيتكوين.
+          <Info className="w-4 h-4 mt-0.5 shrink-0 text-yellow-500" />
+          <p className="text-[10px] leading-relaxed">
+            مؤشر مباشر يعكس نفسية المتداولين. الخوف الشديد قد يكون فرصة شراء، والطمع الشديد قد ينذر بتصحيح.
           </p>
         </div>
       </div>
