@@ -24,7 +24,7 @@ const CreateArticle = lazy(() => import('./pages/admin/CreateArticle'));
 // A simple loading fallback
 const PageLoader = () => (
   <div className="flex items-center justify-center min-h-[60vh]">
-    <div className="w-10 h-10 border-4 border-green-500 border-t-transparent rounded-full animate-spin"></div>
+    <div className="w-10 h-10 border-4 border-yellow-500 border-t-transparent rounded-full animate-spin"></div>
   </div>
 );
 
