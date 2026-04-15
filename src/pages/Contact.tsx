@@ -41,67 +41,67 @@ export default function Contact() {
         <link rel="canonical" href="https://crypto-arabic.vercel.app/contact" />
       </Helmet>
       <div className="max-w-2xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-100 mb-8 text-center">اتصل بنا</h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-8 text-center">اتصل بنا</h1>
         
-        <div className="bg-gray-900 rounded-2xl p-8 shadow-sm border border-gray-800">
-          <h2 className="text-xl font-bold text-gray-100 mb-6">أرسل لنا رسالة</h2>
+        <div className="bg-white dark:bg-gray-900 rounded-2xl p-8 shadow-sm border border-gray-200 dark:border-gray-800 transition-colors duration-300">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-6">أرسل لنا رسالة</h2>
           
           {status === 'success' && (
-            <div className="mb-6 p-4 bg-green-500/10 text-green-500 rounded-lg border border-green-500/20">
+            <div className="mb-6 p-4 bg-green-500/10 text-green-600 dark:text-green-500 rounded-lg border border-green-500/20">
               تم إرسال رسالتك بنجاح! سنتواصل معك قريباً.
             </div>
           )}
           
           {status === 'error' && (
-            <div className="mb-6 p-4 bg-red-500/10 text-red-500 rounded-lg border border-red-500/20">
+            <div className="mb-6 p-4 bg-red-500/10 text-red-600 dark:text-red-500 rounded-lg border border-red-500/20">
               {errorMessage}
             </div>
           )}
 
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
-              <label className="block text-sm font-medium text-gray-400 mb-1">الاسم الكامل</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">الاسم الكامل</label>
               <input 
                 type="text" 
                 required
                 value={formData.name}
                 onChange={e => setFormData({...formData, name: e.target.value})}
-                className="w-full px-4 py-3 bg-gray-950 border border-gray-800 text-white rounded-xl focus:ring-1 focus:ring-green-500 focus:border-green-500 outline-none transition-colors" 
+                className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white rounded-xl focus:ring-1 focus:ring-yellow-500 focus:border-yellow-500 outline-none transition-colors" 
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-400 mb-1">البريد الإلكتروني</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">البريد الإلكتروني</label>
               <input 
                 type="email" 
                 required
                 value={formData.email}
                 onChange={e => setFormData({...formData, email: e.target.value})}
-                className="w-full px-4 py-3 bg-gray-950 border border-gray-800 text-white rounded-xl focus:ring-1 focus:ring-green-500 focus:border-green-500 outline-none transition-colors" 
+                className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white rounded-xl focus:ring-1 focus:ring-yellow-500 focus:border-yellow-500 outline-none transition-colors" 
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-400 mb-1">موضوع الرسالة</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">موضوع الرسالة</label>
               <input 
                 type="text" 
                 value={formData.subject}
                 onChange={e => setFormData({...formData, subject: e.target.value})}
-                className="w-full px-4 py-3 bg-gray-950 border border-gray-800 text-white rounded-xl focus:ring-1 focus:ring-green-500 focus:border-green-500 outline-none transition-colors" 
+                className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white rounded-xl focus:ring-1 focus:ring-yellow-500 focus:border-yellow-500 outline-none transition-colors" 
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-400 mb-1">الرسالة</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">الرسالة</label>
               <textarea 
                 rows={5} 
                 required
                 value={formData.message}
                 onChange={e => setFormData({...formData, message: e.target.value})}
-                className="w-full px-4 py-3 bg-gray-950 border border-gray-800 text-white rounded-xl focus:ring-1 focus:ring-green-500 focus:border-green-500 outline-none transition-colors resize-none"
+                className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white rounded-xl focus:ring-1 focus:ring-yellow-500 focus:border-yellow-500 outline-none transition-colors resize-none"
               ></textarea>
             </div>
             <button 
               type="submit" 
               disabled={status === 'loading'}
-              className="w-full bg-green-500 text-white px-4 py-3 rounded-xl font-medium hover:bg-green-600 transition-colors disabled:opacity-70 mt-2"
+              className="w-full bg-yellow-500 text-gray-900 px-4 py-3 rounded-xl font-bold hover:bg-yellow-600 transition-colors disabled:opacity-70 mt-2"
             >
               {status === 'loading' ? 'جاري الإرسال...' : 'إرسال الرسالة'}
             </button>

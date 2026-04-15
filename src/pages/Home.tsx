@@ -158,7 +158,7 @@ export default function Home() {
   };
 
   return (
-    <div className="relative min-h-screen bg-gray-950">
+    <div className="relative min-h-screen bg-gray-50 dark:bg-gray-950 transition-colors duration-300">
       <Helmet>
         <title>كريبتو بالعربي - أخبار وتحليلات العملات الرقمية</title>
         <meta name="description" content="منصة متخصصة في أخبار وتحليلات العملات الرقمية والتداول، مدعومة بالذكاء الاصطناعي لتقديم أحدث المعلومات لحظة بلحظة." />
@@ -170,8 +170,8 @@ export default function Home() {
 
       {/* Web3 Background Aesthetics */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay"></div>
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] opacity-20" style={{ background: 'radial-gradient(circle, rgba(243,186,47,0.2) 0%, rgba(0,0,0,0) 70%)' }}></div>
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 dark:opacity-10 mix-blend-overlay"></div>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] opacity-10 dark:opacity-20" style={{ background: 'radial-gradient(circle, rgba(243,186,47,0.2) 0%, rgba(0,0,0,0) 70%)' }}></div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-12 relative z-10">
@@ -183,7 +183,7 @@ export default function Home() {
               {/* Main Featured Article (Bento Large) */}
               <Link 
                 to={`/article/${articles[0].slug}`} 
-                className="lg:col-span-8 group relative rounded-[2.5rem] overflow-hidden border border-gray-800/60 hover:border-yellow-500/50 transition-all duration-500 shadow-2xl min-h-[500px] flex flex-col justify-end"
+                className="lg:col-span-8 group relative rounded-[2.5rem] overflow-hidden border border-gray-200 dark:border-gray-800/60 hover:border-yellow-500/50 dark:hover:border-yellow-500/50 transition-all duration-500 shadow-2xl min-h-[500px] flex flex-col justify-end"
               >
                 <div className="absolute inset-0">
                   {articles[0].image_url ? (
@@ -194,11 +194,11 @@ export default function Home() {
                       referrerPolicy="no-referrer"
                     />
                   ) : (
-                    <div className="w-full h-full bg-gray-800 flex items-center justify-center">
-                      <TrendingUp className="w-20 h-20 text-gray-700" />
+                    <div className="w-full h-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+                      <TrendingUp className="w-20 h-20 text-gray-300 dark:text-gray-700" />
                     </div>
                   )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/40 to-transparent opacity-90 group-hover:opacity-70 transition-opacity"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 dark:from-gray-950 dark:via-gray-950/40 to-transparent opacity-90 group-hover:opacity-70 transition-opacity"></div>
                 </div>
                 
                 <div className="relative z-10 p-8 lg:p-12 w-full lg:w-4/5">
@@ -206,7 +206,7 @@ export default function Home() {
                     <span className="bg-yellow-500 text-gray-950 text-xs px-4 py-1.5 rounded-full font-bold uppercase tracking-wider shadow-lg shadow-yellow-500/30">
                       {articles[0].category || 'أخبار'}
                     </span>
-                    <span className="flex items-center gap-1.5 text-sm text-gray-300 font-medium bg-gray-900/50 backdrop-blur-md px-3 py-1 rounded-full border border-gray-700/50">
+                    <span className="flex items-center gap-1.5 text-sm text-gray-100 dark:text-gray-300 font-medium bg-gray-900/50 backdrop-blur-md px-3 py-1 rounded-full border border-gray-700/50">
                       <Clock className="w-4 h-4" />
                       {format(new Date(articles[0].published_at), 'dd MMMM yyyy', { locale: ar })}
                     </span>
@@ -228,9 +228,9 @@ export default function Home() {
                 </div>
                 
                 {/* BTC Analysis Box */}
-                <div className="bg-gray-900/40 backdrop-blur-sm rounded-[2rem] border border-gray-800/60 shadow-xl overflow-hidden flex flex-col h-[300px]">
-                  <div className="p-5 border-b border-gray-800/60 flex items-center justify-between">
-                    <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                <div className="bg-white/40 dark:bg-gray-900/40 backdrop-blur-sm rounded-[2rem] border border-gray-200 dark:border-gray-800/60 shadow-xl overflow-hidden flex flex-col h-[300px] transition-colors duration-300">
+                  <div className="p-5 border-b border-gray-200 dark:border-gray-800/60 flex items-center justify-between">
+                    <h3 className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
                       <TrendingUp className="w-4 h-4 text-yellow-500" />
                       تحليل BTC المباشر
                     </h3>
@@ -252,7 +252,7 @@ export default function Home() {
             className="relative overflow-hidden group block"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-yellow-600/10 to-yellow-700/10 group-hover:from-yellow-600/20 group-hover:to-yellow-700/20 transition-all duration-500"></div>
-            <div className="relative bg-gray-900/60 backdrop-blur-xl border border-yellow-500/30 rounded-[3rem] p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-10 overflow-hidden shadow-[0_0_50px_-12px_rgba(243,186,47,0.2)]">
+            <div className="relative bg-white/80 dark:bg-gray-900/60 backdrop-blur-xl border border-yellow-500/30 rounded-[3rem] p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-10 overflow-hidden shadow-[0_0_50px_-12px_rgba(243,186,47,0.2)] transition-colors duration-300">
               <div className="absolute -top-24 -right-24 w-80 h-80 bg-yellow-500/20 rounded-full blur-[100px] group-hover:bg-yellow-500/30 transition-all duration-700"></div>
               <div className="absolute -bottom-24 -left-24 w-80 h-80 bg-yellow-600/10 rounded-full blur-[100px] group-hover:bg-yellow-600/20 transition-all duration-700"></div>
               
@@ -267,16 +267,16 @@ export default function Home() {
                   <div className="flex items-center justify-center md:justify-start gap-3 mb-4">
                     <span className="bg-yellow-500 text-gray-950 text-[10px] px-3 py-1 rounded-full font-black uppercase tracking-widest shadow-lg shadow-yellow-500/20">جديد</span>
                     <div className="w-1.5 h-1.5 bg-yellow-500/50 rounded-full"></div>
-                    <span className="text-yellow-500/80 text-xs font-bold tracking-wide">مدعوم بالذكاء الاصطناعي</span>
+                    <span className="text-yellow-600 dark:text-yellow-500/80 text-xs font-bold tracking-wide">مدعوم بالذكاء الاصطناعي</span>
                   </div>
-                  <h2 className="text-4xl md:text-5xl font-black text-white mb-4 tracking-tight">ملخص السوق اليومي</h2>
-                  <p className="text-gray-300 text-lg md:text-xl max-w-xl leading-relaxed font-medium">
+                  <h2 className="text-4xl md:text-5xl font-black text-gray-900 dark:text-white mb-4 tracking-tight">ملخص السوق اليومي</h2>
+                  <p className="text-gray-600 dark:text-gray-300 text-lg md:text-xl max-w-xl leading-relaxed font-medium">
                     وفر وقتك واعرف أهم ما حدث في عالم الكريبتو خلال الـ 24 ساعة الماضية بضغطة واحدة.
                   </p>
                 </div>
               </div>
               
-              <div className="relative z-10 flex items-center gap-4 bg-white text-gray-950 px-10 py-5 rounded-[1.5rem] font-black shadow-2xl group-hover:bg-yellow-400 transition-all duration-300 whitespace-nowrap transform group-hover:-translate-x-2">
+              <div className="relative z-10 flex items-center gap-4 bg-gray-900 dark:bg-white text-white dark:text-gray-950 px-10 py-5 rounded-[1.5rem] font-black shadow-2xl group-hover:bg-yellow-400 group-hover:text-gray-950 transition-all duration-300 whitespace-nowrap transform group-hover:-translate-x-2">
                 اقرأ الملخص الآن
                 <ChevronLeft className="w-6 h-6" />
               </div>
@@ -289,12 +289,12 @@ export default function Home() {
           <div className="lg:col-span-8">
             {/* Categories Filter */}
             <section className="mb-10 relative">
-              <div className="absolute top-0 left-0 bottom-4 w-12 bg-gradient-to-r from-gray-950 to-transparent pointer-events-none z-10 md:hidden"></div>
+              <div className="absolute top-0 left-0 bottom-4 w-12 bg-gradient-to-r from-gray-50 dark:from-gray-950 to-transparent pointer-events-none z-10 md:hidden"></div>
               <div className="flex items-center gap-3 overflow-x-auto pb-4 scrollbar-hide relative">
-                <div className="bg-gray-900/80 backdrop-blur-md border border-gray-800 p-2.5 rounded-2xl shrink-0 ml-2 shadow-lg">
+                <div className="bg-white dark:bg-gray-900/80 backdrop-blur-md border border-gray-200 dark:border-gray-800 p-2.5 rounded-2xl shrink-0 ml-2 shadow-lg transition-colors duration-300">
                   <Filter className="w-5 h-5 text-yellow-500" />
                 </div>
-                <div className="flex bg-gray-900/40 backdrop-blur-sm border border-gray-800/60 p-1.5 rounded-2xl shrink-0 w-max">
+                <div className="flex bg-white/40 dark:bg-gray-900/40 backdrop-blur-sm border border-gray-200 dark:border-gray-800/60 p-1.5 rounded-2xl shrink-0 w-max transition-colors duration-300">
                   {CATEGORIES.map(category => (
                     <button
                       key={category}
@@ -302,7 +302,7 @@ export default function Home() {
                       className={`shrink-0 px-6 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 ${
                         currentCategory === category
                           ? 'bg-yellow-500 text-gray-950 shadow-lg shadow-yellow-500/30'
-                          : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
+                          : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/50'
                       }`}
                     >
                       {category}
@@ -315,7 +315,7 @@ export default function Home() {
             {/* Articles Grid */}
             <section>
               <div className="flex items-center justify-between mb-8">
-                <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
                   {currentSearch ? `نتائج البحث عن "${currentSearch}"` : 'أحدث المقالات'}
                 </h2>
               </div>
@@ -323,12 +323,12 @@ export default function Home() {
               {loading ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {[1, 2, 3, 4].map(i => (
-                    <div key={i} className="animate-pulse bg-gray-900/50 rounded-3xl h-[400px] border border-gray-800/60"></div>
+                    <div key={i} className="animate-pulse bg-gray-100 dark:bg-gray-900/50 rounded-3xl h-[400px] border border-gray-200 dark:border-gray-800/60 transition-colors duration-300"></div>
                   ))}
                 </div>
               ) : (isDefaultView ? articles.slice(1) : articles).length === 0 ? (
-                <div className="text-center py-20 bg-gray-900/50 rounded-3xl border border-gray-800/60">
-                  <p className="text-gray-400 text-lg">لم يتم العثور على مقالات تطابق بحثك.</p>
+                <div className="text-center py-20 bg-gray-100 dark:bg-gray-900/50 rounded-3xl border border-gray-200 dark:border-gray-800/60 transition-colors duration-300">
+                  <p className="text-gray-500 dark:text-gray-400 text-lg">لم يتم العثور على مقالات تطابق بحثك.</p>
                 </div>
               ) : (
                 <>
@@ -337,9 +337,9 @@ export default function Home() {
                       <Link 
                         key={article.id} 
                         to={`/article/${article.slug}`}
-                        className="group bg-gray-900/40 backdrop-blur-sm rounded-3xl overflow-hidden border border-gray-800/60 hover:border-yellow-500/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-yellow-500/10 flex flex-col"
+                        className="group bg-white/40 dark:bg-gray-900/40 backdrop-blur-sm rounded-3xl overflow-hidden border border-gray-200 dark:border-gray-800/60 hover:border-yellow-500/30 dark:hover:border-yellow-500/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-yellow-500/10 flex flex-col"
                       >
-                        <div className="relative aspect-[16/10] overflow-hidden bg-gray-800">
+                        <div className="relative aspect-[16/10] overflow-hidden bg-gray-100 dark:bg-gray-800">
                           {article.image_url ? (
                             <img 
                               src={article.image_url} 
@@ -348,19 +348,19 @@ export default function Home() {
                               referrerPolicy="no-referrer"
                             />
                           ) : (
-                            <div className="w-full h-full flex items-center justify-center text-gray-600">
+                            <div className="w-full h-full flex items-center justify-center text-gray-400 dark:text-gray-600">
                               <TrendingUp className="w-12 h-12 opacity-20" />
                             </div>
                           )}
-                          <div className="absolute top-4 right-4 bg-gray-950/80 backdrop-blur-md text-white text-xs px-3 py-1.5 rounded-full flex items-center gap-1.5 border border-gray-700/50">
-                            <Clock className="w-3.5 h-3.5 text-green-400" />
+                          <div className="absolute top-4 right-4 bg-white/80 dark:bg-gray-950/80 backdrop-blur-md text-gray-900 dark:text-white text-xs px-3 py-1.5 rounded-full flex items-center gap-1.5 border border-gray-200 dark:border-gray-700/50 transition-colors duration-300">
+                            <Clock className="w-3.5 h-3.5 text-yellow-600 dark:text-yellow-400" />
                             {format(new Date(article.published_at), 'dd MMM', { locale: ar })}
                           </div>
                         </div>
                         
                         <div className="p-6 lg:p-8 flex flex-col flex-grow">
                           <div className="flex items-center justify-between mb-3">
-                            <div className="text-green-500 text-sm font-bold">
+                            <div className="text-yellow-600 dark:text-yellow-500 text-sm font-bold">
                               {article.category || 'أخبار'}
                             </div>
                             <div className="text-gray-500 text-xs font-medium flex items-center gap-1">
@@ -368,10 +368,10 @@ export default function Home() {
                               {calculateReadingTime(article.content_length)} د
                             </div>
                           </div>
-                          <h3 className="text-xl font-bold text-gray-100 mb-4 line-clamp-2 group-hover:text-green-400 transition-colors leading-snug">
+                          <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 line-clamp-2 group-hover:text-yellow-600 dark:group-hover:text-yellow-400 transition-colors leading-snug">
                             {article.title}
                           </h3>
-                          <p className="text-gray-400 text-sm line-clamp-3 mb-6 flex-grow leading-relaxed">
+                          <p className="text-gray-600 dark:text-gray-400 text-sm line-clamp-3 mb-6 flex-grow leading-relaxed">
                             {article.summary}
                           </p>
                         </div>
@@ -385,7 +385,7 @@ export default function Home() {
                       <button
                         onClick={() => handlePageChange(currentPage - 1)}
                         disabled={currentPage === 1}
-                        className="px-4 py-2 rounded-xl bg-gray-900/50 border border-gray-800/60 text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-800 transition-colors font-medium"
+                        className="px-4 py-2 rounded-xl bg-white dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800/60 text-gray-900 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors font-medium"
                       >
                         السابق
                       </button>
@@ -397,8 +397,8 @@ export default function Home() {
                             onClick={() => handlePageChange(page)}
                             className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
                               currentPage === page
-                                ? 'bg-green-500 text-white font-bold shadow-lg shadow-green-500/25 scale-105'
-                                : 'bg-gray-900/50 border border-gray-800/60 text-gray-400 hover:bg-gray-800 hover:text-white font-medium'
+                                ? 'bg-yellow-500 text-gray-950 font-bold shadow-lg shadow-yellow-500/25 scale-105'
+                                : 'bg-white dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800/60 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
                             }`}
                           >
                             {page}
@@ -409,7 +409,7 @@ export default function Home() {
                       <button
                         onClick={() => handlePageChange(currentPage + 1)}
                         disabled={currentPage === pagination.totalPages}
-                        className="px-4 py-2 rounded-xl bg-gray-900/50 border border-gray-800/60 text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-800 transition-colors font-medium"
+                        className="px-4 py-2 rounded-xl bg-white dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800/60 text-gray-900 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors font-medium"
                       >
                         التالي
                       </button>
@@ -423,10 +423,10 @@ export default function Home() {
           {/* Sidebar */}
           <div className="lg:col-span-4 space-y-8">
             {/* Search Widget */}
-            <div className="bg-gray-900/40 backdrop-blur-sm rounded-3xl p-6 lg:p-8 border border-gray-800/60 shadow-xl">
-              <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-3">
-                <div className="bg-green-500/10 p-2 rounded-lg">
-                  <Search className="w-5 h-5 text-green-500" />
+            <div className="bg-white/40 dark:bg-gray-900/40 backdrop-blur-sm rounded-3xl p-6 lg:p-8 border border-gray-200 dark:border-gray-800/60 shadow-xl transition-colors duration-300">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-3">
+                <div className="bg-yellow-500/10 p-2 rounded-lg">
+                  <Search className="w-5 h-5 text-yellow-600 dark:text-yellow-500" />
                 </div>
                 البحث في الموقع
               </h3>
@@ -437,11 +437,11 @@ export default function Home() {
                     value={searchInput}
                     onChange={(e) => setSearchInput(e.target.value)}
                     placeholder="ابحث عن عملة، خبر..."
-                    className="w-full bg-gray-950 border border-gray-800 rounded-2xl py-4 pr-5 pl-16 text-white focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-all placeholder:text-gray-600"
+                    className="w-full bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-2xl py-4 pr-5 pl-16 text-gray-900 dark:text-white focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 transition-all placeholder:text-gray-400 dark:placeholder:text-gray-600"
                   />
                   <button 
                     type="submit"
-                    className="absolute left-2 top-2 bottom-2 bg-green-500 hover:bg-green-600 text-white px-4 rounded-xl transition-colors flex items-center justify-center shadow-lg shadow-green-500/20"
+                    className="absolute left-2 top-2 bottom-2 bg-yellow-500 hover:bg-yellow-600 text-gray-950 px-4 rounded-xl transition-colors flex items-center justify-center shadow-lg shadow-yellow-500/20"
                   >
                     <Search className="w-5 h-5" />
                   </button>
@@ -474,8 +474,8 @@ export default function Home() {
 
             {/* Trending Widget */}
             {trending.length > 0 && (
-              <div className="bg-gray-900/40 backdrop-blur-sm rounded-3xl p-6 lg:p-8 border border-gray-800/60 shadow-xl sticky top-28">
-                <h3 className="text-lg font-bold text-white mb-8 flex items-center gap-3">
+              <div className="bg-white/40 dark:bg-gray-900/40 backdrop-blur-sm rounded-3xl p-6 lg:p-8 border border-gray-200 dark:border-gray-800/60 shadow-xl sticky top-28 transition-colors duration-300">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-8 flex items-center gap-3">
                   <div className="bg-orange-500/10 p-2 rounded-lg">
                     <Flame className="w-5 h-5 text-orange-500" />
                   </div>
@@ -484,11 +484,11 @@ export default function Home() {
                 <div className="space-y-6">
                   {trending.map((article, index) => (
                     <Link key={article.id} to={`/article/${article.slug}`} className="flex gap-5 group items-start">
-                      <div className="text-4xl font-black text-gray-800 group-hover:text-green-500/30 transition-colors mt-1">
+                      <div className="text-4xl font-black text-gray-200 dark:text-gray-800 group-hover:text-yellow-500/30 transition-colors mt-1">
                         0{index + 1}
                       </div>
                       <div>
-                        <h4 className="text-gray-200 font-bold group-hover:text-green-400 transition-colors line-clamp-2 mb-2 leading-snug text-base">
+                        <h4 className="text-gray-900 dark:text-gray-200 font-bold group-hover:text-yellow-600 dark:group-hover:text-yellow-400 transition-colors line-clamp-2 mb-2 leading-snug text-base">
                           {article.title}
                         </h4>
                         <div className="text-xs text-gray-500 font-medium flex items-center gap-1.5">

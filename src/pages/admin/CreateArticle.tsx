@@ -51,42 +51,42 @@ export default function CreateArticle() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 transition-colors duration-300">
       <Helmet>
         <meta name="robots" content="noindex" />
       </Helmet>
       <div className="flex items-center gap-4 mb-8">
         <button
           onClick={() => navigate('/admin/dashboard')}
-          className="p-2 hover:bg-gray-800 rounded-full transition-colors text-gray-400 hover:text-white"
+          className="p-2 hover:bg-gray-200 dark:hover:bg-gray-800 rounded-full transition-colors text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
         >
           <ArrowRight className="w-6 h-6" />
         </button>
-        <h1 className="text-3xl font-bold text-white">إضافة مقال جديد</h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">إضافة مقال جديد</h1>
       </div>
 
       {error && (
-        <div className="bg-red-500/10 border border-red-500/50 text-red-500 px-4 py-3 rounded-lg mb-6">
+        <div className="bg-red-100 dark:bg-red-500/10 border border-red-200 dark:border-red-500/50 text-red-600 dark:text-red-500 px-4 py-3 rounded-lg mb-6">
           {error}
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-6 bg-gray-900 p-6 sm:p-8 rounded-2xl border border-gray-800">
+      <form onSubmit={handleSubmit} className="space-y-6 bg-white dark:bg-gray-900 p-6 sm:p-8 rounded-2xl border border-gray-200 dark:border-gray-800 transition-colors duration-300">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-400">عنوان المقال</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-400">عنوان المقال</label>
             <input
               type="text"
               name="title"
               value={formData.title}
               onChange={handleChange}
               required
-              className="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-colors"
+              className="w-full bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl px-4 py-3 text-gray-900 dark:text-white focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 transition-colors"
             />
           </div>
 
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-400">الرابط الدائم (Slug)</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-400">الرابط الدائم (Slug)</label>
             <input
               type="text"
               name="slug"
@@ -94,68 +94,68 @@ export default function CreateArticle() {
               onChange={handleChange}
               required
               dir="ltr"
-              className="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-colors text-left"
+              className="w-full bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl px-4 py-3 text-gray-900 dark:text-white focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 transition-colors text-left"
             />
           </div>
         </div>
 
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-400">ملخص المقال</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-400">ملخص المقال</label>
           <textarea
             name="summary"
             value={formData.summary}
             onChange={handleChange}
             required
             rows={3}
-            className="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-colors resize-none"
+            className="w-full bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl px-4 py-3 text-gray-900 dark:text-white focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 transition-colors resize-none"
           />
         </div>
 
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-400">محتوى المقال (يدعم Markdown)</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-400">محتوى المقال (يدعم Markdown)</label>
           <textarea
             name="content"
             value={formData.content}
             onChange={handleChange}
             required
             rows={15}
-            className="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-colors font-mono text-sm"
+            className="w-full bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl px-4 py-3 text-gray-900 dark:text-white focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 transition-colors font-mono text-sm"
           />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-400">رابط الصورة (اختياري)</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-400">رابط الصورة (اختياري)</label>
             <input
               type="url"
               name="image_url"
               value={formData.image_url}
               onChange={handleChange}
               dir="ltr"
-              className="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-colors text-left"
+              className="w-full bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl px-4 py-3 text-gray-900 dark:text-white focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 transition-colors text-left"
             />
           </div>
 
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-400">الكلمات المفتاحية (مفصول بفاصلة)</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-400">الكلمات المفتاحية (مفصول بفاصلة)</label>
             <input
               type="text"
               name="keywords"
               value={formData.keywords}
               onChange={handleChange}
-              className="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-colors"
+              className="w-full bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl px-4 py-3 text-gray-900 dark:text-white focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 transition-colors"
             />
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-400">التصنيف</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-400">التصنيف</label>
             <select
               name="category"
               value={formData.category}
               onChange={handleChange}
-              className="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-colors"
+              className="w-full bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl px-4 py-3 text-gray-900 dark:text-white focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 transition-colors"
             >
               <option value="أخبار">أخبار</option>
               <option value="تحليل">تحليل</option>
@@ -166,12 +166,12 @@ export default function CreateArticle() {
           </div>
 
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-400">حالة النشر</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-400">حالة النشر</label>
             <select
               name="status"
               value={formData.status}
               onChange={handleChange}
-              className="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-colors"
+              className="w-full bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl px-4 py-3 text-gray-900 dark:text-white focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 transition-colors"
             >
               <option value="published">منشور (Published)</option>
               <option value="draft">مسودة (Draft)</option>
@@ -183,7 +183,7 @@ export default function CreateArticle() {
           <button
             type="submit"
             disabled={isLoading}
-            className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-3 px-8 rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Save className="w-5 h-5" />
             {isLoading ? 'جاري الحفظ...' : 'حفظ المقال'}

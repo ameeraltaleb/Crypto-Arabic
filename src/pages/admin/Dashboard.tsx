@@ -99,21 +99,21 @@ export default function AdminDashboard() {
   };
 
   if (isLoading) {
-    return <div className="min-h-[50vh] flex items-center justify-center text-green-500">جاري التحميل...</div>;
+    return <div className="min-h-[50vh] flex items-center justify-center text-yellow-500">جاري التحميل...</div>;
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 transition-colors duration-300">
       <Helmet>
         <meta name="robots" content="noindex" />
       </Helmet>
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-white">لوحة التحكم</h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">لوحة التحكم</h1>
         <div className="flex items-center gap-4">
           {activeTab === 'articles' && (
             <Link
               to="/admin/articles/new"
-              className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors font-medium"
+              className="flex items-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-gray-900 px-4 py-2 rounded-lg transition-colors font-bold"
             >
               <Edit className="w-4 h-4" />
               <span>مقال جديد</span>
@@ -121,7 +121,7 @@ export default function AdminDashboard() {
           )}
           <button
             onClick={handleLogout}
-            className="flex items-center gap-2 text-gray-400 hover:text-red-500 transition-colors"
+            className="flex items-center gap-2 text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-500 transition-colors"
           >
             <LogOut className="w-5 h-5" />
             <span>تسجيل خروج</span>
@@ -130,11 +130,11 @@ export default function AdminDashboard() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-4 mb-8 border-b border-gray-800 pb-4">
+      <div className="flex gap-4 mb-8 border-b border-gray-200 dark:border-gray-800 pb-4 transition-colors duration-300">
         <button
           onClick={() => setActiveTab('articles')}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${
-            activeTab === 'articles' ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
+            activeTab === 'articles' ? 'bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/50'
           }`}
         >
           <FileText className="w-5 h-5" />
@@ -143,7 +143,7 @@ export default function AdminDashboard() {
         <button
           onClick={() => setActiveTab('settings')}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${
-            activeTab === 'settings' ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
+            activeTab === 'settings' ? 'bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/50'
           }`}
         >
           <Settings className="w-5 h-5" />
@@ -152,10 +152,10 @@ export default function AdminDashboard() {
       </div>
 
       {activeTab === 'articles' ? (
-        <div className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden">
+        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden transition-colors duration-300">
           <div className="overflow-x-auto">
             <table className="w-full text-right">
-              <thead className="bg-gray-950 border-b border-gray-800 text-gray-400">
+              <thead className="bg-gray-50 dark:bg-gray-950 border-b border-gray-200 dark:border-gray-800 text-gray-500 dark:text-gray-400 transition-colors duration-300">
                 <tr>
                   <th className="px-6 py-4 font-medium">عنوان المقال</th>
                   <th className="px-6 py-4 font-medium">التصنيف</th>
@@ -165,35 +165,35 @@ export default function AdminDashboard() {
                   <th className="px-6 py-4 font-medium">إجراءات</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-800">
+              <tbody className="divide-y divide-gray-200 dark:divide-gray-800 transition-colors duration-300">
                 {articles.map((article) => (
-                  <tr key={article.id} className="hover:bg-gray-800/50 transition-colors">
+                  <tr key={article.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                     <td className="px-6 py-4">
-                      <div className="text-white font-medium line-clamp-1">{article.title}</div>
+                      <div className="text-gray-900 dark:text-white font-medium line-clamp-1">{article.title}</div>
                     </td>
-                    <td className="px-6 py-4 text-gray-400">
-                      <span className="bg-gray-800 px-2 py-1 rounded text-xs">{article.category || 'أخبار'}</span>
+                    <td className="px-6 py-4 text-gray-500 dark:text-gray-400">
+                      <span className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-xs transition-colors duration-300">{article.category || 'أخبار'}</span>
                     </td>
                     <td className="px-6 py-4">
                       {article.status === 'published' ? (
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-green-500/10 text-green-500 border border-green-500/20">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-green-100 dark:bg-green-500/10 text-green-600 dark:text-green-500 border border-green-200 dark:border-green-500/20 transition-colors duration-300">
                           <CheckCircle className="w-3.5 h-3.5" />
                           منشور
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-yellow-500/10 text-yellow-500 border border-yellow-500/20">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 dark:bg-yellow-500/10 text-yellow-600 dark:text-yellow-500 border border-yellow-200 dark:border-yellow-500/20 transition-colors duration-300">
                           <Clock className="w-3.5 h-3.5" />
                           مسودة
                         </span>
                       )}
                     </td>
-                    <td className="px-6 py-4 text-gray-400">
+                    <td className="px-6 py-4 text-gray-500 dark:text-gray-400">
                       <div className="flex items-center gap-1.5">
                         <Eye className="w-4 h-4" />
                         {article.views}
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-gray-400 text-sm">
+                    <td className="px-6 py-4 text-gray-500 dark:text-gray-400 text-sm">
                       {new Date(article.published_at).toLocaleDateString('ar-EG')}
                     </td>
                     <td className="px-6 py-4">
@@ -201,7 +201,7 @@ export default function AdminDashboard() {
                         <Link
                           to={`/article/${article.slug}`}
                           target="_blank"
-                          className="text-gray-400 hover:text-white transition-colors"
+                          className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
                           title="عرض"
                         >
                           <Eye className="w-5 h-5" />
@@ -216,7 +216,7 @@ export default function AdminDashboard() {
                             </button>
                             <button
                               onClick={() => setDeleteConfirmId(null)}
-                              className="text-xs bg-gray-700 hover:bg-gray-600 text-white px-2 py-1 rounded transition-colors"
+                              className="text-xs bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-900 dark:text-white px-2 py-1 rounded transition-colors"
                             >
                               إلغاء
                             </button>
@@ -224,7 +224,7 @@ export default function AdminDashboard() {
                         ) : (
                           <button
                             onClick={() => setDeleteConfirmId(article.id.toString())}
-                            className="text-gray-400 hover:text-red-500 transition-colors"
+                            className="text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-500 transition-colors"
                             title="حذف"
                           >
                             <Trash2 className="w-5 h-5" />
@@ -236,7 +236,7 @@ export default function AdminDashboard() {
                 ))}
                 {articles.length === 0 && (
                   <tr>
-                    <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
+                    <td colSpan={6} className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
                       لا يوجد مقالات حالياً
                     </td>
                   </tr>
@@ -246,12 +246,12 @@ export default function AdminDashboard() {
           </div>
         </div>
       ) : (
-        <div className="bg-gray-900 rounded-2xl border border-gray-800 p-8 max-w-2xl">
-          <h2 className="text-xl font-bold text-white mb-6">روابط التواصل الاجتماعي</h2>
+        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-8 max-w-2xl transition-colors duration-300">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">روابط التواصل الاجتماعي</h2>
           
           {settingsMessage.text && (
             <div className={`mb-6 p-4 rounded-lg border ${
-              settingsMessage.type === 'success' ? 'bg-green-500/10 text-green-500 border-green-500/20' : 'bg-red-500/10 text-red-500 border-red-500/20'
+              settingsMessage.type === 'success' ? 'bg-green-100 dark:bg-green-500/10 text-green-600 dark:text-green-500 border-green-200 dark:border-green-500/20' : 'bg-red-100 dark:bg-red-500/10 text-red-600 dark:text-red-500 border-red-200 dark:border-red-500/20'
             }`}>
               {settingsMessage.text}
             </div>
@@ -259,60 +259,60 @@ export default function AdminDashboard() {
 
           <form onSubmit={handleSaveSettings} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-400 mb-1">رابط تويتر (X)</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">رابط تويتر (X)</label>
               <input 
                 type="url" 
                 value={settings.twitter_url}
                 onChange={e => setSettings({...settings, twitter_url: e.target.value})}
                 placeholder="https://twitter.com/..."
-                className="w-full px-4 py-3 bg-gray-950 border border-gray-800 text-white rounded-xl focus:ring-1 focus:ring-green-500 focus:border-green-500 outline-none transition-colors" 
+                className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white rounded-xl focus:ring-1 focus:ring-yellow-500 focus:border-yellow-500 outline-none transition-colors" 
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-400 mb-1">رابط تيليجرام</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">رابط تيليجرام</label>
               <input 
                 type="url" 
                 value={settings.telegram_url}
                 onChange={e => setSettings({...settings, telegram_url: e.target.value})}
                 placeholder="https://t.me/..."
-                className="w-full px-4 py-3 bg-gray-950 border border-gray-800 text-white rounded-xl focus:ring-1 focus:ring-green-500 focus:border-green-500 outline-none transition-colors" 
+                className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white rounded-xl focus:ring-1 focus:ring-yellow-500 focus:border-yellow-500 outline-none transition-colors" 
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-400 mb-1">رابط فيسبوك</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">رابط فيسبوك</label>
               <input 
                 type="url" 
                 value={settings.facebook_url}
                 onChange={e => setSettings({...settings, facebook_url: e.target.value})}
                 placeholder="https://facebook.com/..."
-                className="w-full px-4 py-3 bg-gray-950 border border-gray-800 text-white rounded-xl focus:ring-1 focus:ring-green-500 focus:border-green-500 outline-none transition-colors" 
+                className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white rounded-xl focus:ring-1 focus:ring-yellow-500 focus:border-yellow-500 outline-none transition-colors" 
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-400 mb-1">رابط انستغرام</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">رابط انستغرام</label>
               <input 
                 type="url" 
                 value={settings.instagram_url}
                 onChange={e => setSettings({...settings, instagram_url: e.target.value})}
                 placeholder="https://instagram.com/..."
-                className="w-full px-4 py-3 bg-gray-950 border border-gray-800 text-white rounded-xl focus:ring-1 focus:ring-green-500 focus:border-green-500 outline-none transition-colors" 
+                className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white rounded-xl focus:ring-1 focus:ring-yellow-500 focus:border-yellow-500 outline-none transition-colors" 
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-400 mb-1">رابط يوتيوب</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">رابط يوتيوب</label>
               <input 
                 type="url" 
                 value={settings.youtube_url}
                 onChange={e => setSettings({...settings, youtube_url: e.target.value})}
                 placeholder="https://youtube.com/..."
-                className="w-full px-4 py-3 bg-gray-950 border border-gray-800 text-white rounded-xl focus:ring-1 focus:ring-green-500 focus:border-green-500 outline-none transition-colors" 
+                className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white rounded-xl focus:ring-1 focus:ring-yellow-500 focus:border-yellow-500 outline-none transition-colors" 
               />
             </div>
             
             <button 
               type="submit" 
               disabled={isSavingSettings}
-              className="flex items-center justify-center gap-2 w-full bg-green-500 text-white px-4 py-3 rounded-xl font-medium hover:bg-green-600 transition-colors disabled:opacity-70 mt-6"
+              className="flex items-center justify-center gap-2 w-full bg-yellow-500 text-gray-900 px-4 py-3 rounded-xl font-bold hover:bg-yellow-600 transition-colors disabled:opacity-70 mt-6"
             >
               <Save className="w-5 h-5" />
               {isSavingSettings ? 'جاري الحفظ...' : 'حفظ الإعدادات'}

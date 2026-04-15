@@ -35,9 +35,9 @@ export default function FearAndGreedIndex() {
 
   if (loading) {
     return (
-      <div className="bg-gray-900/40 backdrop-blur-sm rounded-3xl p-6 lg:p-8 border border-gray-800/60 shadow-xl animate-pulse">
-        <div className="h-6 bg-gray-800 rounded w-1/2 mb-6"></div>
-        <div className="h-32 bg-gray-800 rounded-full w-32 mx-auto"></div>
+      <div className="bg-white/40 dark:bg-gray-900/40 backdrop-blur-sm rounded-3xl p-6 lg:p-8 border border-gray-200 dark:border-gray-800/60 shadow-xl animate-pulse transition-colors duration-300">
+        <div className="h-6 bg-gray-200 dark:bg-gray-800 rounded w-1/2 mb-6"></div>
+        <div className="h-32 bg-gray-200 dark:bg-gray-800 rounded-full w-32 mx-auto"></div>
       </div>
     );
   }
@@ -47,8 +47,8 @@ export default function FearAndGreedIndex() {
   const value = parseInt(data.value, 10);
   
   // Determine color and icon based on value
-  let colorClass = 'text-gray-400';
-  let bgClass = 'bg-gray-800';
+  let colorClass = 'text-gray-500 dark:text-gray-400';
+  let bgClass = 'bg-gray-100 dark:bg-gray-800';
   let Icon = AlertTriangle;
 
   if (value <= 25) {
@@ -77,8 +77,8 @@ export default function FearAndGreedIndex() {
   const rotation = (value / 100) * 180 - 90;
 
   return (
-    <div className="bg-gray-900/40 backdrop-blur-sm rounded-[2rem] p-6 lg:p-8 border border-gray-800/60 shadow-xl h-full flex flex-col">
-      <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-3">
+    <div className="bg-white/40 dark:bg-gray-900/40 backdrop-blur-sm rounded-[2rem] p-6 lg:p-8 border border-gray-200 dark:border-gray-800/60 shadow-xl h-full flex flex-col transition-colors duration-300">
+      <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-3">
         <div className="bg-yellow-500/10 p-2 rounded-xl">
           <Icon className={`w-5 h-5 ${colorClass}`} />
         </div>
@@ -88,7 +88,7 @@ export default function FearAndGreedIndex() {
       <div className="relative flex flex-col items-center justify-center py-4 flex-grow">
         {/* Gauge Background */}
         <div className="relative w-48 h-24 overflow-hidden">
-          <div className="absolute top-0 left-0 w-48 h-48 rounded-full border-[16px] border-gray-800 border-b-transparent border-r-transparent rotate-45"></div>
+          <div className="absolute top-0 left-0 w-48 h-48 rounded-full border-[16px] border-gray-200 dark:border-gray-800 border-b-transparent border-r-transparent rotate-45 transition-colors duration-300"></div>
           {/* Gradient overlay for gauge */}
           <div className="absolute top-0 left-0 w-48 h-48 rounded-full border-[16px] border-transparent border-t-red-500 border-l-yellow-500 border-b-yellow-500 border-r-yellow-400 rotate-45 opacity-20 mix-blend-screen"></div>
           
@@ -105,7 +105,7 @@ export default function FearAndGreedIndex() {
           <div className={`text-5xl font-black ${colorClass} mb-1 tracking-tighter`}>
             {value}
           </div>
-          <div className="text-gray-300 font-bold text-xl mb-2">
+          <div className="text-gray-700 dark:text-gray-300 font-bold text-xl mb-2">
             {data.value_classification === 'Extreme Fear' && 'خوف شديد'}
             {data.value_classification === 'Fear' && 'خوف'}
             {data.value_classification === 'Neutral' && 'محايد'}
@@ -116,8 +116,8 @@ export default function FearAndGreedIndex() {
       </div>
 
       {/* Explanation Section */}
-      <div className="mt-auto pt-5 border-t border-gray-800/60">
-        <div className="flex items-start gap-2.5 text-gray-400">
+      <div className="mt-auto pt-5 border-t border-gray-200 dark:border-gray-800/60 transition-colors duration-300">
+        <div className="flex items-start gap-2.5 text-gray-500 dark:text-gray-400">
           <Info className="w-4 h-4 mt-0.5 shrink-0 text-yellow-500" />
           <p className="text-[10px] leading-relaxed">
             مؤشر مباشر يعكس نفسية المتداولين. الخوف الشديد قد يكون فرصة شراء، والطمع الشديد قد ينذر بتصحيح.
