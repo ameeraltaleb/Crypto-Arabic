@@ -170,7 +170,7 @@ export default function Home() {
       {/* Web3 Background Aesthetics */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay"></div>
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] opacity-20" style={{ background: 'radial-gradient(circle, rgba(34,197,94,0.3) 0%, rgba(0,0,0,0) 70%)' }}></div>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] opacity-20" style={{ background: 'radial-gradient(circle, rgba(243,186,47,0.2) 0%, rgba(0,0,0,0) 70%)' }}></div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-12 relative z-10">
@@ -182,7 +182,7 @@ export default function Home() {
               {/* Main Featured Article */}
               <Link 
                 to={`/article/${articles[0].slug}`} 
-                className="lg:col-span-8 group relative rounded-[2.5rem] overflow-hidden border border-gray-800/60 hover:border-green-500/50 transition-all duration-500 shadow-2xl min-h-[400px] lg:min-h-[500px] flex flex-col justify-end"
+                className="lg:col-span-8 group relative rounded-[2.5rem] overflow-hidden border border-gray-800/60 hover:border-yellow-500/50 transition-all duration-500 shadow-2xl min-h-[400px] lg:min-h-[500px] flex flex-col justify-end"
               >
                 <div className="absolute inset-0">
                   {articles[0].image_url ? (
@@ -202,7 +202,7 @@ export default function Home() {
                 
                 <div className="relative z-10 p-5 lg:p-12 w-full lg:w-4/5">
                   <div className="flex flex-wrap items-center gap-3 mb-4">
-                    <span className="bg-green-500 text-white text-xs px-4 py-1.5 rounded-full font-bold uppercase tracking-wider shadow-lg shadow-green-500/30">
+                    <span className="bg-yellow-500 text-gray-950 text-xs px-4 py-1.5 rounded-full font-bold uppercase tracking-wider shadow-lg shadow-yellow-500/30">
                       {articles[0].category || 'أخبار'}
                     </span>
                     <span className="flex items-center gap-1.5 text-sm text-gray-300 font-medium bg-gray-900/50 backdrop-blur-md px-3 py-1 rounded-full border border-gray-700/50">
@@ -210,7 +210,7 @@ export default function Home() {
                       {format(new Date(articles[0].published_at), 'dd MMMM yyyy', { locale: ar })}
                     </span>
                   </div>
-                  <h2 className="text-2xl md:text-3xl lg:text-5xl font-extrabold text-white leading-[1.3] mb-4 group-hover:text-green-400 transition-colors drop-shadow-lg">
+                  <h2 className="text-2xl md:text-3xl lg:text-5xl font-extrabold text-white leading-[1.3] mb-4 group-hover:text-yellow-400 transition-colors drop-shadow-lg">
                     {articles[0].title}
                   </h2>
                   <p className="text-gray-200 text-lg line-clamp-2 mb-6 drop-shadow-md font-medium">
@@ -226,7 +226,7 @@ export default function Home() {
                     <Link 
                       key={article.id}
                       to={`/article/${article.slug}`} 
-                      className="group relative rounded-[2rem] overflow-hidden border border-gray-800/60 hover:border-green-500/50 transition-all duration-500 shadow-xl flex-1 min-h-[200px] lg:min-h-[240px] flex flex-col justify-end"
+                      className="group relative rounded-[2rem] overflow-hidden border border-gray-800/60 hover:border-yellow-500/50 transition-all duration-500 shadow-xl flex-1 min-h-[200px] lg:min-h-[240px] flex flex-col justify-end"
                     >
                       <div className="absolute inset-0">
                         {article.image_url ? (
@@ -246,11 +246,11 @@ export default function Home() {
                       
                       <div className="relative z-10 p-6">
                         <div className="flex flex-wrap items-center gap-2 mb-3">
-                          <span className="bg-green-500/90 backdrop-blur-sm text-white text-xs px-3 py-1 rounded-full font-bold shadow-lg">
+                          <span className="bg-yellow-500/90 backdrop-blur-sm text-gray-950 text-xs px-3 py-1 rounded-full font-bold shadow-lg">
                             {article.category || 'أخبار'}
                           </span>
                         </div>
-                        <h3 className="text-xl font-bold text-white leading-snug group-hover:text-green-400 transition-colors line-clamp-3 drop-shadow-lg">
+                        <h3 className="text-xl font-bold text-white leading-snug group-hover:text-yellow-400 transition-colors line-clamp-3 drop-shadow-lg">
                           {article.title}
                         </h3>
                       </div>
@@ -268,17 +268,17 @@ export default function Home() {
             to="/daily-summary"
             className="relative overflow-hidden group block"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-green-600/10 to-emerald-600/10 group-hover:from-green-600/20 group-hover:to-emerald-600/20 transition-all duration-500"></div>
-            <div className="relative bg-gray-900/40 backdrop-blur-md border border-green-500/20 rounded-[2.5rem] p-6 md:p-10 flex flex-col md:flex-row items-center justify-between gap-8 overflow-hidden">
-              <div className="absolute -top-24 -right-24 w-64 h-64 bg-green-500/10 rounded-full blur-3xl group-hover:bg-green-500/20 transition-all duration-500"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-yellow-600/10 to-yellow-700/10 group-hover:from-yellow-600/20 group-hover:to-yellow-700/20 transition-all duration-500"></div>
+            <div className="relative bg-gray-900/40 backdrop-blur-md border border-yellow-500/20 rounded-[2.5rem] p-6 md:p-10 flex flex-col md:flex-row items-center justify-between gap-8 overflow-hidden">
+              <div className="absolute -top-24 -right-24 w-64 h-64 bg-yellow-500/10 rounded-full blur-3xl group-hover:bg-yellow-500/20 transition-all duration-500"></div>
               
               <div className="flex flex-col md:flex-row items-center gap-8 text-center md:text-right">
-                <div className="bg-gradient-to-br from-green-400 to-emerald-600 p-5 rounded-3xl shadow-xl shadow-green-500/20 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
-                  <Sparkles className="w-10 h-10 text-white" />
+                <div className="bg-gradient-to-br from-yellow-400 to-yellow-600 p-5 rounded-3xl shadow-xl shadow-yellow-500/20 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                  <Sparkles className="w-10 h-10 text-gray-950" />
                 </div>
                 <div>
                   <div className="flex items-center justify-center md:justify-start gap-2 mb-2">
-                    <span className="bg-green-500/20 text-green-400 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider border border-green-500/30">جديد</span>
+                    <span className="bg-yellow-500/20 text-yellow-400 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider border border-yellow-500/30">جديد</span>
                     <div className="w-1 h-1 bg-gray-600 rounded-full"></div>
                     <span className="text-gray-400 text-xs font-medium">مدعوم بالذكاء الاصطناعي</span>
                   </div>
@@ -289,7 +289,7 @@ export default function Home() {
                 </div>
               </div>
               
-              <div className="flex items-center gap-3 bg-green-500 text-white px-8 py-4 rounded-2xl font-bold shadow-xl shadow-green-500/30 group-hover:translate-x-[-8px] transition-all whitespace-nowrap">
+              <div className="flex items-center gap-3 bg-yellow-500 text-gray-950 px-8 py-4 rounded-2xl font-bold shadow-xl shadow-yellow-500/30 group-hover:translate-x-[-8px] transition-all whitespace-nowrap">
                 اقرأ الملخص الآن
                 <ChevronLeft className="w-6 h-6" />
               </div>
@@ -305,7 +305,7 @@ export default function Home() {
               <div className="absolute top-0 left-0 bottom-4 w-12 bg-gradient-to-r from-gray-950 to-transparent pointer-events-none z-10 md:hidden"></div>
               <div className="flex items-center gap-3 overflow-x-auto pb-4 scrollbar-hide relative">
                 <div className="bg-gray-900/80 backdrop-blur-md border border-gray-800 p-2.5 rounded-2xl shrink-0 ml-2 shadow-lg">
-                  <Filter className="w-5 h-5 text-green-500" />
+                  <Filter className="w-5 h-5 text-yellow-500" />
                 </div>
                 <div className="flex bg-gray-900/40 backdrop-blur-sm border border-gray-800/60 p-1.5 rounded-2xl shrink-0 w-max">
                   {CATEGORIES.map(category => (
@@ -314,7 +314,7 @@ export default function Home() {
                       onClick={() => handleCategoryChange(category)}
                       className={`shrink-0 px-6 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 ${
                         currentCategory === category
-                          ? 'bg-green-500 text-white shadow-lg shadow-green-500/30'
+                          ? 'bg-yellow-500 text-gray-950 shadow-lg shadow-yellow-500/30'
                           : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
                       }`}
                     >

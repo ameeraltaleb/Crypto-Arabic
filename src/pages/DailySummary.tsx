@@ -58,16 +58,16 @@ export default function DailySummary() {
 
       {/* Decorative Background */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] opacity-20 pointer-events-none" 
-           style={{ background: 'radial-gradient(circle, rgba(34,197,94,0.15) 0%, rgba(0,0,0,0) 70%)' }}></div>
+           style={{ background: 'radial-gradient(circle, rgba(243,186,47,0.15) 0%, rgba(0,0,0,0) 70%)' }}></div>
 
       <div className="max-w-4xl mx-auto px-4 relative z-10">
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 bg-green-500/10 text-green-500 px-4 py-2 rounded-full border border-green-500/20 mb-6">
+          <div className="inline-flex items-center gap-2 bg-yellow-500/10 text-yellow-500 px-4 py-2 rounded-full border border-yellow-500/20 mb-6">
             <Sparkles className="w-5 h-5" />
             <span className="text-sm font-bold">مدعوم بالذكاء الاصطناعي</span>
           </div>
           <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-6 leading-tight">
-            ملخص السوق <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600">اليومي</span>
+            ملخص السوق <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600">اليومي</span>
           </h1>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
             نحلل لك آلاف البيانات والأخبار في ثوانٍ لنقدم لك زبدة ما يحدث في عالم الكريبتو اليوم.
@@ -77,15 +77,15 @@ export default function DailySummary() {
         <div className="bg-gray-900/40 backdrop-blur-xl rounded-[2.5rem] border border-gray-800/60 shadow-2xl overflow-hidden min-h-[400px]">
           <div className="p-6 border-b border-gray-800/60 flex items-center justify-between bg-gray-900/20">
             <div className="flex items-center gap-3">
-              <div className="bg-green-500/10 p-2 rounded-lg">
-                <BarChart2 className="w-5 h-5 text-green-500" />
+              <div className="bg-yellow-500/10 p-2 rounded-lg">
+                <BarChart2 className="w-5 h-5 text-yellow-500" />
               </div>
               <span className="text-white font-bold">تقرير اليوم</span>
             </div>
             <button 
               onClick={fetchDataAndGenerate}
               disabled={isGenerating}
-              className="p-2 text-gray-400 hover:text-green-500 transition-colors disabled:opacity-50"
+              className="p-2 text-gray-400 hover:text-yellow-500 transition-colors disabled:opacity-50"
               title="تحديث الملخص"
             >
               <RefreshCw className={`w-5 h-5 ${isGenerating ? 'animate-spin' : ''}`} />
@@ -95,11 +95,11 @@ export default function DailySummary() {
           <div className="p-8 md:p-12">
             {isLoading ? (
               <div className="flex flex-col items-center justify-center py-20 gap-4">
-                <div className="w-12 h-12 border-4 border-green-500 border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-12 h-12 border-4 border-yellow-500 border-t-transparent rounded-full animate-spin"></div>
                 <p className="text-gray-400 animate-pulse">جاري تحليل بيانات السوق والأخبار...</p>
               </div>
             ) : (
-              <div className="prose prose-invert prose-green max-w-none prose-p:text-gray-300 prose-p:leading-relaxed prose-headings:text-white prose-strong:text-green-400">
+              <div className="prose prose-invert prose-yellow max-w-none prose-p:text-gray-300 prose-p:leading-relaxed prose-headings:text-white prose-strong:text-yellow-400">
                 <ReactMarkdown remarkPlugins={[remarkGfm]}>{summary}</ReactMarkdown>
               </div>
             )}
@@ -115,14 +115,14 @@ export default function DailySummary() {
 
         {/* Action Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12">
-          <div className="bg-gray-900/40 backdrop-blur-sm p-6 rounded-3xl border border-gray-800/60 hover:border-green-500/30 transition-colors group">
-            <div className="bg-blue-500/10 w-12 h-12 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <TrendingUp className="w-6 h-6 text-blue-500" />
+          <div className="bg-gray-900/40 backdrop-blur-sm p-6 rounded-3xl border border-gray-800/60 hover:border-yellow-500/30 transition-colors group">
+            <div className="bg-yellow-500/10 w-12 h-12 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <TrendingUp className="w-6 h-6 text-yellow-500" />
             </div>
             <h3 className="text-white font-bold mb-2">تحليل الأسعار</h3>
             <p className="text-gray-400 text-sm">تابع أسعار العملات الرقمية لحظة بلحظة مع أدوات التحليل المتقدمة.</p>
           </div>
-          <div className="bg-gray-900/40 backdrop-blur-sm p-6 rounded-3xl border border-gray-800/60 hover:border-green-500/30 transition-colors group">
+          <div className="bg-gray-900/40 backdrop-blur-sm p-6 rounded-3xl border border-gray-800/60 hover:border-yellow-500/30 transition-colors group">
             <div className="bg-purple-500/10 w-12 h-12 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
               <MessageSquare className="w-6 h-6 text-purple-500" />
             </div>

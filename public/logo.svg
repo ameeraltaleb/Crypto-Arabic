@@ -1,13 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <defs>
     <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#4ade80" />
-      <stop offset="100%" stop-color="#059669" />
+      <stop offset="0%" stop-color="#F3BA2F" />
+      <stop offset="100%" stop-color="#F0B90B" />
     </linearGradient>
   </defs>
-  <rect width="512" height="512" rx="110" fill="url(#bg-gradient)" />
+  <rect width="512" height="512" rx="110" fill="#181A20" />
+  <rect x="40" y="40" width="432" height="432" rx="80" fill="url(#bg-gradient)" />
   <g transform="translate(116, 116) scale(11.666)">
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#181A20" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
       <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
       <polyline points="16 7 22 7 22 13"></polyline>
     </svg>

@@ -113,7 +113,7 @@ export default function Market() {
 
       {/* Background Aesthetics */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] opacity-20" style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.3) 0%, rgba(0,0,0,0) 70%)' }}></div>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] opacity-20" style={{ background: 'radial-gradient(circle, rgba(243,186,47,0.15) 0%, rgba(0,0,0,0) 70%)' }}></div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 relative z-10">
@@ -122,8 +122,8 @@ export default function Market() {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 bg-gray-900/40 backdrop-blur-sm p-5 md:p-8 rounded-[2rem] border border-gray-800/60 shadow-2xl">
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <div className="bg-blue-500/10 p-3 rounded-xl">
-                <Activity className="w-8 h-8 text-blue-500" />
+              <div className="bg-yellow-500/10 p-3 rounded-xl">
+                <Activity className="w-8 h-8 text-yellow-500" />
               </div>
               <h1 className="text-3xl md:text-4xl font-extrabold text-white">أسعار السوق والتحليل الفني</h1>
             </div>
@@ -135,8 +135,8 @@ export default function Market() {
           <div className="flex flex-col items-end gap-3">
             <div className="flex items-center gap-2 text-sm font-medium bg-gray-950/50 px-4 py-2 rounded-full border border-gray-800">
               <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-yellow-500"></span>
               </span>
               <span className="text-gray-300">
                 آخر تحديث: {format(lastUpdated, 'hh:mm:ss a', { locale: ar })}
@@ -145,7 +145,7 @@ export default function Market() {
             <button 
               onClick={fetchMarketData}
               disabled={isRefreshing}
-              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-bold transition-all disabled:opacity-50 shadow-lg shadow-blue-500/20"
+              className="flex items-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-gray-950 px-5 py-2.5 rounded-xl font-bold transition-all disabled:opacity-50 shadow-lg shadow-yellow-500/20"
             >
               <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
               تحديث البيانات
@@ -158,7 +158,7 @@ export default function Market() {
           <div className="lg:col-span-2 bg-gray-900/40 backdrop-blur-sm rounded-[2.5rem] border border-gray-800/60 shadow-2xl overflow-hidden p-1">
             <div className="p-6 border-b border-gray-800/60 flex items-center justify-between">
               <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                <LineChart className="w-5 h-5 text-green-500" />
+                <LineChart className="w-5 h-5 text-yellow-500" />
                 الرسم البياني المتقدم
               </h2>
               <div className="text-xs text-gray-400 font-mono bg-gray-950 px-3 py-1 rounded-full border border-gray-800">
@@ -172,11 +172,11 @@ export default function Market() {
           
           <div className="bg-gray-900/40 backdrop-blur-sm rounded-[2.5rem] border border-gray-800/60 shadow-2xl overflow-hidden p-6">
             <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-              <BarChart3 className="w-5 h-5 text-blue-500" />
+              <BarChart3 className="w-5 h-5 text-yellow-500" />
               مؤشر التحليل الفني
             </h2>
             <TechnicalAnalysisWidget symbol={selectedCoin} />
-            <div className="mt-6 p-4 bg-blue-500/5 border border-blue-500/10 rounded-2xl">
+            <div className="mt-6 p-4 bg-yellow-500/5 border border-yellow-500/10 rounded-2xl">
               <p className="text-xs text-gray-400 leading-relaxed text-center">
                 هذا المؤشر يعتمد على مجموعة من المؤشرات الفنية (RSI, MACD, Moving Averages) لتقديم نظرة سريعة على اتجاه السعر.
               </p>
@@ -220,7 +220,7 @@ export default function Market() {
                   coins.map((coin) => (
                     <tr 
                       key={coin.id} 
-                      className={`hover:bg-gray-800/20 transition-colors group cursor-pointer ${selectedCoin.includes(coin.symbol.toUpperCase()) ? 'bg-green-500/5' : ''}`}
+                      className={`hover:bg-gray-800/20 transition-colors group cursor-pointer ${selectedCoin.includes(coin.symbol.toUpperCase()) ? 'bg-yellow-500/5' : ''}`}
                       onClick={() => setSelectedCoin(`BINANCE:${coin.symbol.toUpperCase()}USDT`)}
                     >
                       <td className="p-5 text-gray-500 font-medium text-center">{coin.market_cap_rank}</td>
@@ -270,7 +270,7 @@ export default function Market() {
                         <button 
                           className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                             selectedCoin.includes(coin.symbol.toUpperCase())
-                              ? 'bg-green-500 text-white shadow-lg shadow-green-500/20'
+                              ? 'bg-yellow-500 text-gray-950 shadow-lg shadow-yellow-500/20'
                               : 'bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700'
                           }`}
                         >

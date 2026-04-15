@@ -61,11 +61,11 @@ export default function Layout() {
           <div className="flex justify-between h-20 items-center">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2 sm:gap-3 group shrink-0">
-              <div className="bg-gradient-to-br from-green-400 to-emerald-600 text-white p-2 sm:p-2.5 rounded-xl group-hover:scale-105 transition-transform shadow-lg shadow-green-500/20">
+              <div className="bg-gradient-to-br from-yellow-400 to-yellow-600 text-gray-950 p-2 sm:p-2.5 rounded-xl group-hover:scale-105 transition-transform shadow-lg shadow-yellow-500/20">
                 <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6" />
               </div>
               <span className="text-lg sm:text-2xl font-bold text-white tracking-tight">
-                كريبتو <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600">بالعربي</span>
+                كريبتو <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600">بالعربي</span>
               </span>
             </Link>
 
@@ -75,8 +75,8 @@ export default function Layout() {
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`text-sm font-medium transition-colors hover:text-green-400 ${
-                    isActive(link.path) ? 'text-green-500' : 'text-gray-300'
+                  className={`text-sm font-medium transition-colors hover:text-yellow-400 ${
+                    isActive(link.path) ? 'text-yellow-500' : 'text-gray-300'
                   }`}
                 >
                   {link.label}
@@ -100,7 +100,7 @@ export default function Layout() {
         <div className="md:hidden fixed inset-0 z-[100] bg-gray-950/95 backdrop-blur-xl flex flex-col">
           <div className="flex justify-between items-center h-20 px-4 border-b border-gray-800/60">
             <Link to="/" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-3">
-              <div className="bg-gradient-to-br from-green-400 to-emerald-600 text-white p-2 rounded-lg">
+              <div className="bg-gradient-to-br from-yellow-400 to-yellow-600 text-gray-950 p-2 rounded-lg">
                 <TrendingUp className="w-5 h-5" />
               </div>
               <span className="text-xl font-bold text-white tracking-tight">كريبتو بالعربي</span>
@@ -120,7 +120,7 @@ export default function Layout() {
                 onClick={() => setIsMenuOpen(false)}
                 className={`block px-6 py-4 rounded-2xl text-lg font-bold transition-all ${
                   isActive(link.path)
-                    ? 'bg-green-500/10 text-green-500 border border-green-500/20'
+                    ? 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20'
                     : 'text-gray-300 hover:bg-gray-800 hover:text-white border border-transparent'
                 }`}
               >
@@ -142,7 +142,7 @@ export default function Layout() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
             <div className="col-span-1 md:col-span-2">
               <Link to="/" className="flex items-center gap-3 mb-6">
-                <div className="bg-gradient-to-br from-green-400 to-emerald-600 text-white p-2 rounded-lg">
+                <div className="bg-gradient-to-br from-yellow-400 to-yellow-600 text-gray-950 p-2 rounded-lg">
                   <TrendingUp className="w-5 h-5" />
                 </div>
                 <span className="text-xl font-bold text-white">كريبتو بالعربي</span>
@@ -155,17 +155,17 @@ export default function Layout() {
             <div>
               <h3 className="text-white font-bold mb-6">روابط سريعة</h3>
               <ul className="space-y-4">
-                <li><Link to="/about" className="text-gray-400 hover:text-green-400 transition-colors">من نحن</Link></li>
-                <li><Link to="/contact" className="text-gray-400 hover:text-green-400 transition-colors">اتصل بنا</Link></li>
-                <li><a href="/rss.xml" className="text-gray-400 hover:text-green-400 transition-colors">خلاصة RSS</a></li>
+                <li><Link to="/about" className="text-gray-400 hover:text-yellow-400 transition-colors">من نحن</Link></li>
+                <li><Link to="/contact" className="text-gray-400 hover:text-yellow-400 transition-colors">اتصل بنا</Link></li>
+                <li><a href="/rss.xml" className="text-gray-400 hover:text-yellow-400 transition-colors">خلاصة RSS</a></li>
               </ul>
             </div>
 
             <div>
               <h3 className="text-white font-bold mb-6">قانوني</h3>
               <ul className="space-y-4">
-                <li><Link to="/privacy" className="text-gray-400 hover:text-green-400 transition-colors">سياسة الخصوصية</Link></li>
-                <li><Link to="/terms" className="text-gray-400 hover:text-green-400 transition-colors">شروط الاستخدام</Link></li>
+                <li><Link to="/privacy" className="text-gray-400 hover:text-yellow-400 transition-colors">سياسة الخصوصية</Link></li>
+                <li><Link to="/terms" className="text-gray-400 hover:text-yellow-400 transition-colors">شروط الاستخدام</Link></li>
               </ul>
             </div>
           </div>
@@ -176,27 +176,27 @@ export default function Layout() {
             </p>
             <div className="flex items-center gap-4">
               {settings.twitter_url && (
-                <a href={settings.twitter_url} target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-green-400 transition-colors" title="Twitter">
+                <a href={settings.twitter_url} target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-yellow-400 transition-colors" title="Twitter">
                   <Twitter className="w-5 h-5" />
                 </a>
               )}
               {settings.telegram_url && (
-                <a href={settings.telegram_url} target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-green-400 transition-colors" title="Telegram">
+                <a href={settings.telegram_url} target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-yellow-400 transition-colors" title="Telegram">
                   <Send className="w-5 h-5" />
                 </a>
               )}
               {settings.facebook_url && (
-                <a href={settings.facebook_url} target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-green-400 transition-colors" title="Facebook">
+                <a href={settings.facebook_url} target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-yellow-400 transition-colors" title="Facebook">
                   <Facebook className="w-5 h-5" />
                 </a>
               )}
               {settings.instagram_url && (
-                <a href={settings.instagram_url} target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-green-400 transition-colors" title="Instagram">
+                <a href={settings.instagram_url} target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-yellow-400 transition-colors" title="Instagram">
                   <Instagram className="w-5 h-5" />
                 </a>
               )}
               {settings.youtube_url && (
-                <a href={settings.youtube_url} target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-green-400 transition-colors" title="YouTube">
+                <a href={settings.youtube_url} target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-yellow-400 transition-colors" title="YouTube">
                   <Youtube className="w-5 h-5" />
                 </a>
               )}
