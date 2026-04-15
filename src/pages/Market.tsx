@@ -154,8 +154,8 @@ export default function Market() {
         </div>
 
         {/* TradingView Analysis Section */}
-        <section className="mb-16 grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 bg-white/40 dark:bg-gray-900/40 backdrop-blur-sm rounded-[2.5rem] border border-gray-200 dark:border-gray-800/60 shadow-2xl overflow-hidden p-1 transition-colors duration-300">
+        <section className="mb-16">
+          <div className="bg-white/40 dark:bg-gray-900/40 backdrop-blur-sm rounded-[2.5rem] border border-gray-200 dark:border-gray-800/60 shadow-2xl overflow-hidden p-1 transition-colors duration-300">
             <div className="p-6 border-b border-gray-200 dark:border-gray-800/60 flex items-center justify-between">
               <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
                 <LineChart className="w-5 h-5 text-yellow-600 dark:text-yellow-500" />
@@ -165,21 +165,8 @@ export default function Market() {
                 {selectedCoin}
               </div>
             </div>
-            <div className="h-[500px]">
+            <div className="h-[600px]">
               <TradingViewWidget symbol={selectedCoin} />
-            </div>
-          </div>
-          
-          <div className="bg-white/40 dark:bg-gray-900/40 backdrop-blur-sm rounded-[2.5rem] border border-gray-200 dark:border-gray-800/60 shadow-2xl overflow-hidden p-6 transition-colors duration-300">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
-              <BarChart3 className="w-5 h-5 text-yellow-600 dark:text-yellow-500" />
-              مؤشر التحليل الفني
-            </h2>
-            <TechnicalAnalysisWidget symbol={selectedCoin} />
-            <div className="mt-6 p-4 bg-yellow-500/5 border border-yellow-500/10 rounded-2xl">
-              <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed text-center">
-                هذا المؤشر يعتمد على مجموعة من المؤشرات الفنية (RSI, MACD, Moving Averages) لتقديم نظرة سريعة على اتجاه السعر.
-              </p>
             </div>
           </div>
         </section>

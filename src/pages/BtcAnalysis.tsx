@@ -2,6 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import FearAndGreedIndex from '../components/FearAndGreedIndex';
 import TechnicalAnalysisWidget from '../components/TechnicalAnalysisWidget';
+import TradingViewWidget from '../components/TradingViewWidget';
 import { TrendingUp, Activity } from 'lucide-react';
 
 export default function BtcAnalysis() {
@@ -34,49 +35,79 @@ export default function BtcAnalysis() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Fear and Greed Index Section */}
-          <div className="lg:col-span-4 flex flex-col gap-6">
-            <div className="bg-white dark:bg-gray-900 rounded-[2rem] border border-gray-200 dark:border-gray-800 shadow-xl p-6 transition-colors duration-300">
-              <div className="flex items-center gap-3 mb-6">
+        <div className="space-y-8">
+          {/* Main Chart Section */}
+          <div className="bg-white dark:bg-gray-900 rounded-[2.5rem] border border-gray-200 dark:border-gray-800 shadow-xl overflow-hidden transition-colors duration-300">
+            <div className="p-6 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between bg-gray-50/50 dark:bg-gray-800/20">
+              <div className="flex items-center gap-3">
                 <div className="bg-yellow-100 dark:bg-yellow-500/10 p-3 rounded-xl">
-                  <Activity className="w-6 h-6 text-yellow-600 dark:text-yellow-500" />
+                  <TrendingUp className="w-6 h-6 text-yellow-600 dark:text-yellow-500" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">مؤشر الخوف والطمع</h2>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">تحديث يومي لمشاعر السوق</p>
+                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">الرسم البياني المباشر (BTC/USDT)</h2>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">تحليل السعر اللحظي من Binance</p>
                 </div>
               </div>
-              <FearAndGreedIndex />
-              <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-100 dark:border-gray-700/50">
-                <h3 className="font-bold text-gray-900 dark:text-white mb-2 text-sm">كيف تقرأ المؤشر؟</h3>
-                <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-2">
-                  <li><strong className="text-red-500">الخوف الشديد (0-24):</strong> قد يكون علامة على قلق المستثمرين، مما يمثل فرصة شراء محتملة.</li>
-                  <li><strong className="text-green-500">الطمع الشديد (75-100):</strong> يعني أن المستثمرين متفائلون جداً، وقد يكون السوق على وشك تصحيح.</li>
-                </ul>
-              </div>
+            </div>
+            <div className="h-[600px]">
+              <TradingViewWidget symbol="BINANCE:BTCUSDT" />
             </div>
           </div>
 
-          {/* BTC Technical Analysis Section */}
-          <div className="lg:col-span-8">
-            <div className="bg-white dark:bg-gray-900 rounded-[2rem] border border-gray-200 dark:border-gray-800 shadow-xl overflow-hidden flex flex-col h-[600px] transition-colors duration-300">
-              <div className="p-6 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between bg-gray-50/50 dark:bg-gray-800/20">
-                <div className="flex items-center gap-3">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            {/* Fear and Greed Index Section */}
+            <div className="lg:col-span-5 flex flex-col gap-6">
+              <div className="bg-white dark:bg-gray-900 rounded-[2.5rem] border border-gray-200 dark:border-gray-800 shadow-xl p-8 transition-colors duration-300 flex flex-col h-full">
+                <div className="flex items-center gap-3 mb-8">
                   <div className="bg-yellow-100 dark:bg-yellow-500/10 p-3 rounded-xl">
-                    <TrendingUp className="w-6 h-6 text-yellow-600 dark:text-yellow-500" />
+                    <Activity className="w-6 h-6 text-yellow-600 dark:text-yellow-500" />
                   </div>
                   <div>
-                    <h2 className="text-xl font-bold text-gray-900 dark:text-white">تحليل BTC المباشر</h2>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">مؤشرات فنية ورسوم بيانية حية</p>
+                    <h2 className="text-xl font-bold text-gray-900 dark:text-white">مؤشر الخوف والطمع</h2>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">تحديث يومي لمشاعر السوق</p>
                   </div>
                 </div>
-                <span className="bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-xs px-3 py-1.5 rounded-lg font-mono font-medium">
-                  BINANCE:BTCUSDT
-                </span>
+                <div className="flex-grow flex items-center justify-center">
+                  <FearAndGreedIndex />
+                </div>
+                <div className="mt-8 p-5 bg-gray-50 dark:bg-gray-800/50 rounded-2xl border border-gray-100 dark:border-gray-700/50">
+                  <h3 className="font-bold text-gray-900 dark:text-white mb-3 text-sm">كيف تقرأ المؤشر؟</h3>
+                  <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-3">
+                    <li className="flex gap-2">
+                      <span className="text-red-500 font-bold shrink-0">●</span>
+                      <span><strong>الخوف الشديد (0-24):</strong> قد يكون علامة على قلق المستثمرين، مما يمثل فرصة شراء محتملة.</span>
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-green-500 font-bold shrink-0">●</span>
+                      <span><strong>الطمع الشديد (75-100):</strong> يعني أن المستثمرين متفائلون جداً، وقد يكون السوق على وشك تصحيح.</span>
+                    </li>
+                  </ul>
+                </div>
               </div>
-              <div className="flex-grow w-full h-full p-2">
-                <TechnicalAnalysisWidget height="100%" symbol="BINANCE:BTCUSDT" />
+            </div>
+
+            {/* BTC Technical Analysis Gauge Section */}
+            <div className="lg:col-span-7">
+              <div className="bg-white dark:bg-gray-900 rounded-[2.5rem] border border-gray-200 dark:border-gray-800 shadow-xl overflow-hidden flex flex-col h-full transition-colors duration-300">
+                <div className="p-8 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between bg-gray-50/50 dark:bg-gray-800/20">
+                  <div className="flex items-center gap-3">
+                    <div className="bg-yellow-100 dark:bg-yellow-500/10 p-3 rounded-xl">
+                      <Activity className="w-6 h-6 text-yellow-600 dark:text-yellow-500" />
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-bold text-gray-900 dark:text-white">مؤشر التحليل الفني</h2>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">ملخص المؤشرات الفنية (1D)</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-6 flex-grow">
+                  <TechnicalAnalysisWidget height={400} symbol="BINANCE:BTCUSDT" />
+                </div>
+                <div className="p-6 bg-gray-50/50 dark:bg-gray-800/20 border-t border-gray-200 dark:border-gray-800">
+                  <p className="text-xs text-gray-500 dark:text-gray-400 text-center leading-relaxed">
+                    يعتمد هذا المؤشر على تحليل فني لعدة مؤشرات مثل المتوسطات المتحركة، مؤشر القوة النسبية (RSI)، والماكد (MACD) لتقديم نظرة عامة على قوة الاتجاه.
+                  </p>
+                </div>
               </div>
             </div>
           </div>

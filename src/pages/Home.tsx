@@ -253,34 +253,32 @@ export default function Home() {
             to="/daily-summary"
             className="relative overflow-hidden group block"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-yellow-600/10 to-yellow-700/10 group-hover:from-yellow-600/20 group-hover:to-yellow-700/20 transition-all duration-500"></div>
-            <div className="relative bg-white/80 dark:bg-gray-900/60 backdrop-blur-xl border border-yellow-500/30 rounded-[3rem] p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-10 overflow-hidden shadow-[0_0_50px_-12px_rgba(243,186,47,0.2)] transition-colors duration-300">
-              <div className="absolute -top-24 -right-24 w-80 h-80 bg-yellow-500/20 rounded-full blur-[100px] group-hover:bg-yellow-500/30 transition-all duration-700"></div>
-              <div className="absolute -bottom-24 -left-24 w-80 h-80 bg-yellow-600/10 rounded-full blur-[100px] group-hover:bg-yellow-600/20 transition-all duration-700"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-yellow-600/5 to-yellow-700/5 group-hover:from-yellow-600/10 group-hover:to-yellow-700/10 transition-all duration-500"></div>
+            <div className="relative bg-white/60 dark:bg-gray-900/40 backdrop-blur-xl border border-yellow-500/20 rounded-[2.5rem] p-6 md:p-10 flex flex-col md:flex-row items-center justify-between gap-8 overflow-hidden shadow-xl transition-colors duration-300">
+              <div className="absolute -top-24 -right-24 w-64 h-64 bg-yellow-500/10 rounded-full blur-[80px] group-hover:bg-yellow-500/20 transition-all duration-700"></div>
               
-              <div className="flex flex-col md:flex-row items-center gap-10 text-center md:text-right relative z-10">
-                <div className="relative">
+              <div className="flex flex-col md:flex-row items-center gap-8 text-center md:text-right relative z-10">
+                <div className="relative shrink-0">
                   <div className="absolute inset-0 bg-yellow-400 blur-2xl opacity-20 group-hover:opacity-40 transition-opacity"></div>
-                  <div className="relative bg-gradient-to-br from-yellow-400 to-yellow-600 p-6 rounded-[2rem] shadow-2xl shadow-yellow-500/40 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
-                    <Sparkles className="w-12 h-12 text-gray-950" />
+                  <div className="relative bg-gradient-to-br from-yellow-400 to-yellow-600 p-5 rounded-2xl shadow-xl shadow-yellow-500/20 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                    <Sparkles className="w-10 h-10 text-gray-950" />
                   </div>
                 </div>
                 <div>
-                  <div className="flex items-center justify-center md:justify-start gap-3 mb-4">
-                    <span className="bg-yellow-500 text-gray-950 text-[10px] px-3 py-1 rounded-full font-black uppercase tracking-widest shadow-lg shadow-yellow-500/20">جديد</span>
-                    <div className="w-1.5 h-1.5 bg-yellow-500/50 rounded-full"></div>
-                    <span className="text-yellow-600 dark:text-yellow-500/80 text-xs font-bold tracking-wide">مدعوم بالذكاء الاصطناعي</span>
+                  <div className="flex items-center justify-center md:justify-start gap-3 mb-3">
+                    <span className="bg-yellow-500 text-gray-950 text-[9px] px-2.5 py-0.5 rounded-full font-black uppercase tracking-widest shadow-lg shadow-yellow-500/20">جديد</span>
+                    <span className="text-yellow-600 dark:text-yellow-500/80 text-[11px] font-bold tracking-wide">ملخص ذكي بالذكاء الاصطناعي</span>
                   </div>
-                  <h2 className="text-4xl md:text-5xl font-black text-gray-900 dark:text-white mb-4 tracking-tight">ملخص السوق اليومي</h2>
-                  <p className="text-gray-600 dark:text-gray-300 text-lg md:text-xl max-w-xl leading-relaxed font-medium">
+                  <h2 className="text-2xl md:text-3xl font-black text-gray-900 dark:text-white mb-2 tracking-tight">ملخص السوق اليومي</h2>
+                  <p className="text-gray-500 dark:text-gray-400 text-sm md:text-base max-w-lg leading-relaxed font-medium">
                     وفر وقتك واعرف أهم ما حدث في عالم الكريبتو خلال الـ 24 ساعة الماضية بضغطة واحدة.
                   </p>
                 </div>
               </div>
               
-              <div className="relative z-10 flex items-center gap-4 bg-gray-900 dark:bg-white text-white dark:text-gray-950 px-10 py-5 rounded-[1.5rem] font-black shadow-2xl group-hover:bg-yellow-400 group-hover:text-gray-950 transition-all duration-300 whitespace-nowrap transform group-hover:-translate-x-2">
-                اقرأ الملخص الآن
-                <ChevronLeft className="w-6 h-6" />
+              <div className="relative z-10 flex items-center gap-3 bg-gray-950 dark:bg-white text-white dark:text-gray-950 px-8 py-4 rounded-2xl font-bold text-sm shadow-xl group-hover:bg-yellow-500 group-hover:text-gray-950 transition-all duration-300 whitespace-nowrap">
+                اقرأ الملخص
+                <ChevronLeft className="w-5 h-5" />
               </div>
             </div>
           </Link>
