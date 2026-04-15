@@ -269,7 +269,7 @@ async function startServer() {
       if (snapshot.empty) return res.status(404).json({ error: 'Article not found' });
       
       const docSnap = snapshot.docs[0];
-      const article = { id: docSnap.id, ...docSnap.data() };
+      const article: any = { id: docSnap.id, ...docSnap.data() };
       
       // Increment views
       await updateDoc(doc(firestore, 'articles', docSnap.id), {

@@ -3,7 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { format } from 'date-fns';
 import { ar } from 'date-fns/locale';
-import { TrendingUp, Clock, ChevronLeft, Search, Filter, Flame, BookOpen } from 'lucide-react';
+import { TrendingUp, Clock, ChevronLeft, Search, Filter, Flame, BookOpen, Sparkles } from 'lucide-react';
 import FearAndGreedIndex from '../components/FearAndGreedIndex';
 import { collection, query, where, orderBy, limit, getDocs, startAfter, count } from 'firebase/firestore';
 import { db } from '../lib/firebase';
@@ -261,6 +261,41 @@ export default function Home() {
             </div>
           </section>
         )}
+
+        {/* AI Summary Banner */}
+        <div className="mb-16">
+          <Link 
+            to="/daily-summary"
+            className="relative overflow-hidden group block"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-green-600/10 to-emerald-600/10 group-hover:from-green-600/20 group-hover:to-emerald-600/20 transition-all duration-500"></div>
+            <div className="relative bg-gray-900/40 backdrop-blur-md border border-green-500/20 rounded-[2.5rem] p-6 md:p-10 flex flex-col md:flex-row items-center justify-between gap-8 overflow-hidden">
+              <div className="absolute -top-24 -right-24 w-64 h-64 bg-green-500/10 rounded-full blur-3xl group-hover:bg-green-500/20 transition-all duration-500"></div>
+              
+              <div className="flex flex-col md:flex-row items-center gap-8 text-center md:text-right">
+                <div className="bg-gradient-to-br from-green-400 to-emerald-600 p-5 rounded-3xl shadow-xl shadow-green-500/20 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                  <Sparkles className="w-10 h-10 text-white" />
+                </div>
+                <div>
+                  <div className="flex items-center justify-center md:justify-start gap-2 mb-2">
+                    <span className="bg-green-500/20 text-green-400 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider border border-green-500/30">جديد</span>
+                    <div className="w-1 h-1 bg-gray-600 rounded-full"></div>
+                    <span className="text-gray-400 text-xs font-medium">مدعوم بالذكاء الاصطناعي</span>
+                  </div>
+                  <h2 className="text-3xl md:text-4xl font-black text-white mb-3">ملخص السوق اليومي</h2>
+                  <p className="text-gray-400 text-base md:text-lg max-w-xl leading-relaxed">
+                    وفر وقتك واعرف أهم ما حدث في عالم الكريبتو خلال الـ 24 ساعة الماضية بضغطة واحدة.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-3 bg-green-500 text-white px-8 py-4 rounded-2xl font-bold shadow-xl shadow-green-500/30 group-hover:translate-x-[-8px] transition-all whitespace-nowrap">
+                اقرأ الملخص الآن
+                <ChevronLeft className="w-6 h-6" />
+              </div>
+            </div>
+          </Link>
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           {/* Main Content Area */}

@@ -16,6 +16,7 @@ const About = lazy(() => import('./pages/About'));
 const Privacy = lazy(() => import('./pages/Privacy'));
 const Terms = lazy(() => import('./pages/Terms'));
 const Contact = lazy(() => import('./pages/Contact'));
+const DailySummary = lazy(() => import('./pages/DailySummary'));
 const AdminLogin = lazy(() => import('./pages/admin/Login'));
 const AdminDashboard = lazy(() => import('./pages/admin/Dashboard'));
 const CreateArticle = lazy(() => import('./pages/admin/CreateArticle'));
@@ -40,6 +41,7 @@ export default function App() {
             <Route path="privacy" element={<Privacy />} />
             <Route path="terms" element={<Terms />} />
             <Route path="contact" element={<Contact />} />
+            <Route path="daily-summary" element={<DailySummary />} />
             
             {/* Admin Routes */}
             <Route path="admin" element={<Navigate to="/admin/dashboard" replace />} />

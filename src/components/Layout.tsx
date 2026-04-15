@@ -40,6 +40,7 @@ export default function Layout() {
 
   const navLinks = [
     { path: '/', label: 'الرئيسية' },
+    { path: '/daily-summary', label: 'ملخص اليوم' },
     { path: '/market', label: 'أسعار العملات' },
     { path: '/about', label: 'من نحن' },
     { path: '/contact', label: 'اتصل بنا' },

@@ -5,9 +5,10 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { format } from 'date-fns';
 import { ar } from 'date-fns/locale';
-import { ArrowRight, Share2, Twitter, Facebook, Link as LinkIcon, ChevronLeft, Clock, BookOpen, MessageCircle } from 'lucide-react';
+import { ArrowRight, Share2, Twitter, Facebook, Link as LinkIcon, ChevronLeft, Clock, BookOpen, MessageCircle, BarChart3 } from 'lucide-react';
 import { collection, query, where, limit, getDocs, updateDoc, doc, increment } from 'firebase/firestore';
 import { db } from '../lib/firebase';
+import TechnicalAnalysisWidget from '../components/TechnicalAnalysisWidget';
 
 interface Article {
   id: number;
@@ -26,6 +27,20 @@ interface Article {
 export default function ArticleDetails() {
   const { slug } = useParams<{ slug: string }>();
   const [article, setArticle] = useState<Article | null>(null);
+
+  // Helper to get symbol from category or keywords
+  const getSymbol = () => {
+    if (!article) return "BINANCE:BTCUSDT";
+    const text = (article.title + " " + article.category + " " + (article.keywords || "")).toLowerCase();
+    if (text.includes('بيتكوين') || text.includes('bitcoin') || text.includes('btc')) return "BINANCE:BTCUSDT";
+    if (text.includes('إيثيريوم') || text.includes('ethereum') || text.includes('eth')) return "BINANCE:ETHUSDT";
+    if (text.includes('سولانا') || text.includes('solana') || text.includes('sol')) return "BINANCE:SOLUSDT";
+    if (text.includes('ريبل') || text.includes('ripple') || text.includes('xrp')) return "BINANCE:XRPUSDT";
+    if (text.includes('كاردانو') || text.includes('cardano') || text.includes('ada')) return "BINANCE:ADAUSDT";
+    if (text.includes('دوجكوين') || text.includes('dogecoin') || text.includes('doge')) return "BINANCE:DOGEUSDT";
+    return "BINANCE:BTCUSDT";
+  };
+
   const [relatedArticles, setRelatedArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
@@ -300,6 +315,27 @@ export default function ArticleDetails() {
       <div className="prose prose-invert prose-green max-w-none prose-img:rounded-2xl prose-img:shadow-xl prose-headings:text-gray-100 prose-a:text-green-500 hover:prose-a:text-green-400 prose-p:text-gray-300 prose-p:leading-relaxed prose-li:text-gray-300 break-words prose-pre:overflow-x-auto">
         <ReactMarkdown remarkPlugins={[remarkGfm]}>{article.content}</ReactMarkdown>
       </div>
+
+      {/* Technical Analysis Section */}
+      <section className="mt-12 p-6 md:p-8 bg-gray-900/40 backdrop-blur-sm rounded-[2rem] border border-gray-800/60 shadow-2xl">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+          <div>
+            <h2 className="text-2xl font-bold text-white flex items-center gap-3 mb-2">
+              <BarChart3 className="w-6 h-6 text-blue-500" />
+              التحليل الفني المباشر
+            </h2>
+            <p className="text-gray-400 text-sm">
+              مؤشرات فنية حية لعملة {article.category === 'أخبار' ? 'البيتكوين' : article.category} بناءً على البيانات الحالية من TradingView.
+            </p>
+          </div>
+          <div className="bg-gray-950 px-4 py-2 rounded-xl border border-gray-800 text-xs font-mono text-gray-400">
+            {getSymbol()}
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto">
+          <TechnicalAnalysisWidget symbol={getSymbol()} height={450} />
+        </div>
+      </section>
 
       {article.source_url && (
         <div className="mt-12 pt-8 border-t border-gray-800/60">

@@ -16,6 +16,8 @@
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/logo.svg" />
     <link rel="apple-touch-icon" href="/logo.svg" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#22c55e" />
     
     <!-- Google Site Verification (Search Console) -->
     <meta name="google-site-verification" content="l4TJoel13Mg85Jpg3mBr5g5v5OLemOIvk-EQpeeyYDw" />
@@ -36,6 +38,13 @@
   <body class="bg-gray-950 text-gray-100 font-sans antialiased overflow-x-hidden">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js');
+        });
+      }
+    </script>
   </body>
 </html>
 
