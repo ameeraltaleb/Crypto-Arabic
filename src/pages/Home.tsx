@@ -4,8 +4,6 @@ import { Helmet } from 'react-helmet-async';
 import { format } from 'date-fns';
 import { ar } from 'date-fns/locale';
 import { TrendingUp, Clock, ChevronLeft, Search, Filter, Flame, BookOpen, Sparkles } from 'lucide-react';
-import FearAndGreedIndex from '../components/FearAndGreedIndex';
-import TechnicalAnalysisWidget from '../components/TechnicalAnalysisWidget';
 import { collection, query, where, orderBy, limit, getDocs, startAfter, count } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 
@@ -222,24 +220,28 @@ export default function Home() {
 
               {/* Bento Side Column */}
               <div className="lg:col-span-4 flex flex-col gap-6">
-                {/* Fear & Greed Index Box */}
-                <div className="flex-1">
-                  <FearAndGreedIndex />
-                </div>
-                
-                {/* BTC Analysis Box */}
-                <div className="bg-white/40 dark:bg-gray-900/40 backdrop-blur-sm rounded-[2rem] border border-gray-200 dark:border-gray-800/60 shadow-xl overflow-hidden flex flex-col h-[300px] transition-colors duration-300">
-                  <div className="p-5 border-b border-gray-200 dark:border-gray-800/60 flex items-center justify-between">
-                    <h3 className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                      <TrendingUp className="w-4 h-4 text-yellow-500" />
-                      تحليل BTC المباشر
+                {/* BTC Analysis & Fear/Greed Banner */}
+                <Link 
+                  to="/btc-analysis"
+                  className="flex-1 bg-gradient-to-br from-gray-900 to-gray-800 dark:from-gray-950 dark:to-gray-900 rounded-[2rem] border border-gray-700 dark:border-gray-800 shadow-xl overflow-hidden group relative flex flex-col justify-center p-8 transition-all hover:shadow-2xl hover:shadow-yellow-500/10"
+                >
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-yellow-500/10 rounded-full blur-3xl -mr-20 -mt-20 transition-transform group-hover:scale-110"></div>
+                  <div className="relative z-10">
+                    <div className="bg-yellow-500/20 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 border border-yellow-500/30 group-hover:bg-yellow-500/30 transition-colors">
+                      <TrendingUp className="w-8 h-8 text-yellow-500" />
+                    </div>
+                    <h3 className="text-2xl font-black text-white mb-3 leading-tight">
+                      تحليل البيتكوين ومؤشر الخوف والطمع
                     </h3>
-                    <span className="text-[10px] text-gray-500 font-mono">1D Interval</span>
+                    <p className="text-gray-400 text-sm leading-relaxed mb-6">
+                      تابع حركة البيتكوين المباشرة وتعرف على مشاعر السوق من خلال مؤشر الخوف والطمع المحدث باستمرار.
+                    </p>
+                    <div className="inline-flex items-center gap-2 text-yellow-500 font-bold text-sm group-hover:gap-3 transition-all">
+                      <span>عرض التحليل</span>
+                      <svg className="w-4 h-4 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                    </div>
                   </div>
-                  <div className="flex-grow overflow-hidden">
-                    <TechnicalAnalysisWidget height="100%" symbol="BINANCE:BTCUSDT" />
-                  </div>
-                </div>
+                </Link>
               </div>
             </div>
           </section>
@@ -448,9 +450,6 @@ export default function Home() {
                 </div>
               </form>
             </div>
-
-            {/* Fear and Greed Index Widget */}
-            <FearAndGreedIndex />
 
             {/* Telegram Community Widget */}
             <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-3xl p-8 shadow-xl relative overflow-hidden group">

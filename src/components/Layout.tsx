@@ -44,6 +44,7 @@ export default function Layout() {
     { path: '/', label: 'الرئيسية' },
     { path: '/daily-summary', label: 'ملخص اليوم' },
     { path: '/market', label: 'أسعار العملات' },
+    { path: '/btc-analysis', label: 'تحليل ومؤشرات' },
     { path: '/about', label: 'من نحن' },
     { path: '/contact', label: 'اتصل بنا' },
   ];

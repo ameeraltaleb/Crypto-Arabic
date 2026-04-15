@@ -17,6 +17,7 @@ const Privacy = lazy(() => import('./pages/Privacy'));
 const Terms = lazy(() => import('./pages/Terms'));
 const Contact = lazy(() => import('./pages/Contact'));
 const DailySummary = lazy(() => import('./pages/DailySummary'));
+const BtcAnalysis = lazy(() => import('./pages/BtcAnalysis'));
 const AdminLogin = lazy(() => import('./pages/admin/Login'));
 const AdminDashboard = lazy(() => import('./pages/admin/Dashboard'));
 const CreateArticle = lazy(() => import('./pages/admin/CreateArticle'));
@@ -42,6 +43,7 @@ export default function App() {
             <Route path="terms" element={<Terms />} />
             <Route path="contact" element={<Contact />} />
             <Route path="daily-summary" element={<DailySummary />} />
+            <Route path="btc-analysis" element={<BtcAnalysis />} />
             
             {/* Admin Routes */}
             <Route path="admin" element={<Navigate to="/admin/dashboard" replace />} />
