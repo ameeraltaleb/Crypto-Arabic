@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { Edit, Trash2, Eye, LogOut, CheckCircle, Clock, Settings, FileText, Save } from 'lucide-react';
 import { collection, getDocs, deleteDoc, doc, setDoc, query, orderBy } from 'firebase/firestore';
-import { db } from '../../lib/firebase';
+import { db, handleFirestoreError, OperationType } from '../../lib/firebase';
 import { useAuth } from '../../lib/AuthContext';
 
 interface Article {
@@ -45,13 +45,15 @@ export default function AdminDashboard() {
     setIsLoading(true);
     try {
       // Fetch articles
-      const q = query(collection(db, 'articles'), orderBy('published_at', 'desc'));
+      const articlesPath = 'articles';
+      const q = query(collection(db, articlesPath), orderBy('published_at', 'desc'));
       const snapshot = await getDocs(q);
       const articlesData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as any));
       setArticles(articlesData);
 
       // Fetch settings
-      const settingsSnapshot = await getDocs(collection(db, 'settings'));
+      const settingsPath = 'settings';
+      const settingsSnapshot = await getDocs(collection(db, settingsPath));
       const settingsData: any = {};
       settingsSnapshot.forEach(doc => {
         settingsData[doc.id] = doc.data().value;
@@ -59,18 +61,21 @@ export default function AdminDashboard() {
       setSettings(prev => ({ ...prev, ...settingsData }));
     } catch (error) {
       console.error('Failed to fetch data:', error);
+      handleFirestoreError(error, OperationType.GET, null);
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleDelete = async (id: string) => {
+    const path = 'articles';
     try {
-      await deleteDoc(doc(db, 'articles', id));
+      await deleteDoc(doc(db, path, id));
       setArticles(articles.filter(a => a.id !== (id as any)));
       setDeleteConfirmId(null);
     } catch (error) {
       console.error('Failed to delete article:', error);
+      handleFirestoreError(error, OperationType.DELETE, `${path}/${id}`);
     }
   };
 
@@ -80,13 +85,15 @@ export default function AdminDashboard() {
     setSettingsMessage({ type: '', text: '' });
 
     try {
+      const path = 'settings';
       const promises = Object.entries(settings).map(([key, value]) => 
-        setDoc(doc(db, 'settings', key), { key, value })
+        setDoc(doc(db, path, key), { key, value })
       );
       await Promise.all(promises);
       setSettingsMessage({ type: 'success', text: 'تم حفظ الإعدادات بنجاح!' });
     } catch (error) {
       setSettingsMessage({ type: 'error', text: 'حدث خطأ أثناء الحفظ.' });
+      handleFirestoreError(error, OperationType.WRITE, 'settings');
     } finally {
       setIsSavingSettings(false);
       setTimeout(() => setSettingsMessage({ type: '', text: '' }), 3000);

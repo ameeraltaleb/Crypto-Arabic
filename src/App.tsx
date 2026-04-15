@@ -7,6 +7,7 @@ import { Suspense, lazy } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
 import { AuthProvider } from './lib/AuthContext';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 // Lazy load pages for better performance (Code Splitting)
 const Home = lazy(() => import('./pages/Home'));
@@ -31,29 +32,31 @@ const PageLoader = () => (
 
 export default function App() {
   return (
-    <AuthProvider>
-      <Suspense fallback={<PageLoader />}>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route path="article/:slug" element={<ArticleDetails />} />
-            <Route path="market" element={<Market />} />
-            <Route path="about" element={<About />} />
-            <Route path="privacy" element={<Privacy />} />
-            <Route path="terms" element={<Terms />} />
-            <Route path="contact" element={<Contact />} />
-            <Route path="daily-summary" element={<DailySummary />} />
-            <Route path="btc-analysis" element={<BtcAnalysis />} />
-            
-            {/* Admin Routes */}
-            <Route path="admin" element={<Navigate to="/admin/dashboard" replace />} />
-            <Route path="admin/login" element={<AdminLogin />} />
-            <Route path="admin/dashboard" element={<AdminDashboard />} />
-            <Route path="admin/articles/new" element={<CreateArticle />} />
-          </Route>
-        </Routes>
-      </Suspense>
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<Home />} />
+              <Route path="article/:slug" element={<ArticleDetails />} />
+              <Route path="market" element={<Market />} />
+              <Route path="about" element={<About />} />
+              <Route path="privacy" element={<Privacy />} />
+              <Route path="terms" element={<Terms />} />
+              <Route path="contact" element={<Contact />} />
+              <Route path="daily-summary" element={<DailySummary />} />
+              <Route path="btc-analysis" element={<BtcAnalysis />} />
+              
+              {/* Admin Routes */}
+              <Route path="admin" element={<Navigate to="/admin/dashboard" replace />} />
+              <Route path="admin/login" element={<AdminLogin />} />
+              <Route path="admin/dashboard" element={<AdminDashboard />} />
+              <Route path="admin/articles/new" element={<CreateArticle />} />
+            </Route>
+          </Routes>
+        </Suspense>
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }
 

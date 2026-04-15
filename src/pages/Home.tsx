@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import { ar } from 'date-fns/locale';
 import { TrendingUp, Clock, ChevronLeft, Search, Filter, Flame, BookOpen, Sparkles } from 'lucide-react';
 import { collection, query, where, orderBy, limit, getDocs, startAfter, count } from 'firebase/firestore';
-import { db } from '../lib/firebase';
+import { db, handleFirestoreError, OperationType } from '../lib/firebase';
 
 interface Article {
   id: number;
@@ -47,9 +47,10 @@ export default function Home() {
 
   useEffect(() => {
     const fetchTrending = async () => {
+      const path = 'articles';
       try {
         const q = query(
-          collection(db, 'articles'),
+          collection(db, path),
           where('status', '==', 'published'),
           orderBy('views', 'desc'),
           limit(5)
@@ -59,6 +60,7 @@ export default function Home() {
         setTrending(trendingData);
       } catch (err) {
         console.error('Failed to fetch trending articles', err);
+        handleFirestoreError(err, OperationType.GET, path);
       }
     };
     fetchTrending();
@@ -66,9 +68,10 @@ export default function Home() {
 
   const fetchArticles = async () => {
     setLoading(true);
+    const path = 'articles';
     try {
       let q = query(
-        collection(db, 'articles'),
+        collection(db, path),
         where('status', '==', 'published'),
         orderBy('published_at', 'desc')
       );
@@ -103,6 +106,7 @@ export default function Home() {
       });
     } catch (err) {
       console.error('Error fetching articles:', err);
+      handleFirestoreError(err, OperationType.GET, path);
     } finally {
       setLoading(false);
     }

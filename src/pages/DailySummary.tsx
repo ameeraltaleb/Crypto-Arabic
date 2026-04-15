@@ -5,7 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import axios from 'axios';
 import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
-import { db } from '../lib/firebase';
+import { db, handleFirestoreError, OperationType } from '../lib/firebase';
 import { generateDailySummary } from '../lib/gemini';
 
 export default function DailySummary() {
@@ -28,7 +28,8 @@ export default function DailySummary() {
       });
 
       // 2. Fetch Latest News from Firebase
-      const q = query(collection(db, 'articles'), orderBy('published_at', 'desc'), limit(5));
+      const path = 'articles';
+      const q = query(collection(db, path), orderBy('published_at', 'desc'), limit(5));
       const snapshot = await getDocs(q);
       const news = snapshot.docs.map(doc => doc.data());
 
@@ -37,7 +38,11 @@ export default function DailySummary() {
       setSummary(aiSummary);
     } catch (error) {
       console.error("Failed to generate summary:", error);
-      setSummary("عذراً، واجهنا مشكلة في جلب البيانات وتوليد الملخص. يرجى المحاولة مرة أخرى.");
+      if (axios.isAxiosError(error)) {
+        setSummary("عذراً، واجهنا مشكلة في جلب بيانات السوق. يرجى المحاولة مرة أخرى.");
+      } else {
+        handleFirestoreError(error, OperationType.GET, 'articles');
+      }
     } finally {
       setIsLoading(false);
       setIsGenerating(false);

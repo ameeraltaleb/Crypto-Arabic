@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { Save, ArrowRight } from 'lucide-react';
 import slugify from 'slugify';
 import { collection, addDoc } from 'firebase/firestore';
-import { db } from '../../lib/firebase';
+import { db, handleFirestoreError, OperationType } from '../../lib/firebase';
 
 export default function CreateArticle() {
   const navigate = useNavigate();
@@ -37,7 +37,8 @@ export default function CreateArticle() {
     setError('');
 
     try {
-      await addDoc(collection(db, 'articles'), {
+      const path = 'articles';
+      await addDoc(collection(db, path), {
         ...formData,
         views: 0,
         published_at: new Date().toISOString()
@@ -45,6 +46,7 @@ export default function CreateArticle() {
       navigate('/admin/dashboard');
     } catch (err) {
       setError('حدث خطأ أثناء حفظ المقال في قاعدة البيانات');
+      handleFirestoreError(err, OperationType.CREATE, 'articles');
     } finally {
       setIsLoading(false);
     }

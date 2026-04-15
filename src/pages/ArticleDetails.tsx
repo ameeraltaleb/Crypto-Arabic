@@ -7,7 +7,7 @@ import { format } from 'date-fns';
 import { ar } from 'date-fns/locale';
 import { ArrowRight, Share2, Twitter, Facebook, Link as LinkIcon, ChevronLeft, Clock, BookOpen, MessageCircle, BarChart3 } from 'lucide-react';
 import { collection, query, where, limit, getDocs, updateDoc, doc, increment } from 'firebase/firestore';
-import { db } from '../lib/firebase';
+import { db, handleFirestoreError, OperationType } from '../lib/firebase';
 import TechnicalAnalysisWidget from '../components/TechnicalAnalysisWidget';
 
 interface Article {
@@ -61,9 +61,10 @@ export default function ArticleDetails() {
     const fetchArticle = async () => {
       if (!slug) return;
       setLoading(true);
+      const path = 'articles';
       try {
         const q = query(
-          collection(db, 'articles'),
+          collection(db, path),
           where('slug', '==', slug),
           limit(1)
         );
@@ -82,13 +83,17 @@ export default function ArticleDetails() {
           setArticle(data);
 
           // Increment views
-          await updateDoc(doc(db, 'articles', docData.id), {
-            views: increment(1)
-          });
+          try {
+            await updateDoc(doc(db, path, docData.id), {
+              views: increment(1)
+            });
+          } catch (e) {
+            console.warn('Failed to increment views', e);
+          }
 
           // Fetch related articles
           const relatedQ = query(
-            collection(db, 'articles'),
+            collection(db, path),
             where('category', '==', data.category),
             limit(4)
           );
@@ -101,7 +106,7 @@ export default function ArticleDetails() {
           // Fallback: If no related articles in the same category, fetch latest articles
           if (related.length === 0) {
             const fallbackQ = query(
-              collection(db, 'articles'),
+              collection(db, path),
               where('status', '==', 'published'),
               limit(4)
             );
@@ -116,6 +121,7 @@ export default function ArticleDetails() {
         }
       } catch (err) {
         console.error('Error fetching article:', err);
+        handleFirestoreError(err, OperationType.GET, path);
       } finally {
         setLoading(false);
       }
