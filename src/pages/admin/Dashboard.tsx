@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { Edit, Trash2, Eye, LogOut, CheckCircle, Clock, Settings, FileText, Save } from 'lucide-react';
+import { Edit, Trash2, Eye, LogOut, CheckCircle, Clock, Settings, FileText, Save, Download } from 'lucide-react';
 import { collection, getDocs, deleteDoc, doc, setDoc, query, orderBy } from 'firebase/firestore';
+import * as XLSX from 'xlsx';
 import { db, handleFirestoreError, OperationType } from '../../lib/firebase';
 import { useAuth } from '../../lib/AuthContext';
 
@@ -105,6 +106,22 @@ export default function AdminDashboard() {
     navigate('/admin/login');
   };
 
+  const handleExportExcel = () => {
+    const formattedData = articles.map(article => ({
+      'عنوان المقال': article.title,
+      'الرابط الدائم': article.slug,
+      'التصنيف': article.category || 'أخبار',
+      'الحالة': article.status === 'published' ? 'منشور' : 'مسودة',
+      'عدد المشاهدات': article.views,
+      'تاريخ النشر': new Date(article.published_at).toLocaleDateString('ar-EG')
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(formattedData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "المقالات");
+    XLSX.writeFile(workbook, "articles_export.xlsx");
+  };
+
   if (isLoading) {
     return <div className="min-h-[50vh] flex items-center justify-center text-yellow-500">جاري التحميل...</div>;
   }
@@ -137,25 +154,36 @@ export default function AdminDashboard() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-4 mb-8 border-b border-gray-200 dark:border-gray-800 pb-4 transition-colors duration-300">
-        <button
-          onClick={() => setActiveTab('articles')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${
-            activeTab === 'articles' ? 'bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/50'
-          }`}
-        >
-          <FileText className="w-5 h-5" />
-          المقالات
-        </button>
-        <button
-          onClick={() => setActiveTab('settings')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${
-            activeTab === 'settings' ? 'bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/50'
-          }`}
-        >
-          <Settings className="w-5 h-5" />
-          الإعدادات
-        </button>
+      <div className="flex justify-between items-center mb-8 border-b border-gray-200 dark:border-gray-800 pb-4 transition-colors duration-300">
+        <div className="flex gap-4">
+          <button
+            onClick={() => setActiveTab('articles')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${
+              activeTab === 'articles' ? 'bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/50'
+            }`}
+          >
+            <FileText className="w-5 h-5" />
+            المقالات
+          </button>
+          <button
+            onClick={() => setActiveTab('settings')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${
+              activeTab === 'settings' ? 'bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/50'
+            }`}
+          >
+            <Settings className="w-5 h-5" />
+            الإعدادات
+          </button>
+        </div>
+        {activeTab === 'articles' && articles.length > 0 && (
+          <button
+            onClick={handleExportExcel}
+            className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors font-bold text-sm"
+          >
+            <Download className="w-4 h-4" />
+            تصدير إلى Excel
+          </button>
+        )}
       </div>
 
       {activeTab === 'articles' ? (

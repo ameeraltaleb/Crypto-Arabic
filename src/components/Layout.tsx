@@ -187,6 +187,7 @@ export default function Layout() {
               <ul className="space-y-4">
                 <li><Link to="/privacy" className="text-gray-600 dark:text-gray-400 hover:text-yellow-600 dark:hover:text-yellow-400 transition-colors">سياسة الخصوصية</Link></li>
                 <li><Link to="/terms" className="text-gray-600 dark:text-gray-400 hover:text-yellow-600 dark:hover:text-yellow-400 transition-colors">شروط الاستخدام</Link></li>
+                <li><Link to="/admin" className="text-gray-600 dark:text-gray-400 hover:text-yellow-600 dark:hover:text-yellow-400 transition-colors">لوحة الإدارة</Link></li>
               </ul>
             </div>
           </div>
