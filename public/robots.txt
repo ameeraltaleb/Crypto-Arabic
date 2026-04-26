@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /admin/
 
-Sitemap: https://ais-dev-7gcg5numetmam7pvcsslob-16132916021.europe-west2.run.app/sitemap.xml
+Sitemap: https://crypto-arabic.vercel.app/sitemap.xml

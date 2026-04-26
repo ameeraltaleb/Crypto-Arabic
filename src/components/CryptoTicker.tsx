@@ -12,10 +12,13 @@ export default function CryptoTicker() {
   useEffect(() => {
     const fetchPrices = async () => {
       try {
-        // Using Binance API for better reliability and higher rate limits
+        // Try Binance API first
         const symbols = ['BTCUSDT', 'ETHUSDT', 'SOLUSDT', 'BNBUSDT', 'XRPUSDT', 'ADAUSDT'];
         const pricePromises = symbols.map(s => 
-          fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${s}`).then(r => r.json())
+          fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${s}`).then(r => {
+            if (!r.ok) throw new Error('Binance response not ok');
+            return r.json();
+          })
         );
         
         const results = await Promise.all(pricePromises);
@@ -23,7 +26,6 @@ export default function CryptoTicker() {
         
         results.forEach(data => {
           const coinId = data.symbol.replace('USDT', '').toLowerCase();
-          // Map binance symbols back to our coin IDs
           const idMap: Record<string, string> = {
             'btc': 'bitcoin',
             'eth': 'ethereum',
@@ -43,7 +45,23 @@ export default function CryptoTicker() {
         
         setPrices(newPrices);
       } catch (error) {
-        console.error('Failed to fetch crypto prices from Binance', error);
+        console.warn('Binance API failed, falling back to CoinGecko...', error);
+        try {
+          // Fallback to CoinGecko API if Binance is blocked (common in some regions/ISPs)
+          const cgResponse = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana,binancecoin,ripple,cardano&vs_currencies=usd&include_24hr_change=true');
+          const cgData = await cgResponse.json();
+          
+          const newPrices: Record<string, CoinData> = {};
+          Object.keys(cgData).forEach(coinId => {
+            newPrices[coinId] = {
+              usd: cgData[coinId].usd,
+              usd_24h_change: cgData[coinId].usd_24h_change
+            };
+          });
+          setPrices(newPrices);
+        } catch (cgError) {
+          console.error('Both Binance and CoinGecko APIs failed to fetch crypto prices', cgError);
+        }
       }
     };
     

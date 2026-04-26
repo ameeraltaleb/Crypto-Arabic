@@ -103,7 +103,7 @@ export async function fetchAndGenerateArticle() {
     let response;
     let retries = 5;
     let delay = 5000; // Start with 5 seconds delay
-    let currentModel = 'gemini-3-flash-preview';
+    let currentModel = 'gemini-2.5-flash';
 
     while (retries > 0) {
       try {
@@ -139,11 +139,11 @@ export async function fetchAndGenerateArticle() {
           
           // Switch model on error to avoid waiting too long
           if (retries === 4) {
-            console.log(`Switching to gemini-3.1-pro-preview due to ${isRateLimited ? '429' : '503'} error...`);
-            currentModel = 'gemini-3.1-pro-preview';
+            console.log(`Switching to gemini-2.5-pro due to ${isRateLimited ? '429' : '503'} error...`);
+            currentModel = 'gemini-2.5-pro';
           } else if (retries === 2) {
-            console.log(`Switching to gemini-3.1-flash-lite-preview due to ${isRateLimited ? '429' : '503'} error...`);
-            currentModel = 'gemini-3.1-flash-lite-preview';
+            console.log(`Switching to gemini-3.1-flash-preview due to ${isRateLimited ? '429' : '503'} error...`);
+            currentModel = 'gemini-3.1-flash-preview';
           }
           
           console.warn(`Gemini API error (${isRateLimited ? '429 Rate Limit' : '503 Unavailable'}) on ${currentModel}. Retries left: ${retries - 1}. Waiting ${Math.round(waitTime)}ms...`);

@@ -165,6 +165,10 @@ export default function Home() {
         <title>كريبتو بالعربي - أخبار وتحليلات العملات الرقمية</title>
         <meta name="description" content="منصة متخصصة في أخبار وتحليلات العملات الرقمية والتداول، مدعومة بالذكاء الاصطناعي لتقديم أحدث المعلومات لحظة بلحظة." />
         <link rel="canonical" href="https://crypto-arabic.vercel.app/" />
+        <meta property="og:title" content="كريبتو بالعربي - أخبار وتحليلات العملات الرقمية" />
+        <meta property="og:description" content="منصة متخصصة في أخبار وتحليلات العملات الرقمية والتداول، مدعومة بالذكاء الاصطناعي لتقديم أحدث المعلومات لحظة بلحظة." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://crypto-arabic.vercel.app/" />
         <script type="application/ld+json">
           {JSON.stringify(websiteSchema)}
         </script>

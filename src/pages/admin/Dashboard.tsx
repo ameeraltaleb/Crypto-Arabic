@@ -15,6 +15,7 @@ interface Article {
   views: number;
   category: string;
   published_at: string;
+  image_url?: string;
 }
 
 export default function AdminDashboard() {
@@ -110,6 +111,7 @@ export default function AdminDashboard() {
     const formattedData = articles.map(article => ({
       'عنوان المقال': article.title,
       'الرابط الدائم': article.slug,
+      'رابط الصورة': article.image_url || 'لا توجد صورة',
       'التصنيف': article.category || 'أخبار',
       'الحالة': article.status === 'published' ? 'منشور' : 'مسودة',
       'عدد المشاهدات': article.views,
